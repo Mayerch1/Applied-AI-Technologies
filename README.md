@@ -1,11 +1,19 @@
 # Applied-AI-Technologies
 
-This repository uses git lfs.
-Use ```git lfs clone``` for not pulling binary data
-Use ```git clone``` for pulling lfs objects aswell
-Download all lfs objects with ```git lfs fetch --all```
 
-For adding more filetypes to git-lfs do ```git lfs track '*.jpg'```
+# HEPHAISTOS
+### TEAM D
+
+Hephaistos - Heuristic epidermological pandemic hypercrisis AMD internet supported tensorflow operational service
+
+with AMD - Advanced Mask Detection
+
+All resources are located in [Hephaistos](Hephaistos)
+
+---
+
+
+
 
 Repo for the lecture "Applied Artificial Intelligence" at the University of Applied Sciences Esslingen created by [Dionysios Satikidis](mailto:dionysios.satikidis@gmail.com) and [Jan Seyler](mailto:Jan.Seyler@gmail.com).
 
