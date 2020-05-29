@@ -1,0 +1,203 @@
+
+> ConnectedStudents-Backend@0.1.0 start:dev /media/platte/websites/ConnectedStudents-WebApp
+> nodemon --config nodemon.json
+
+[33m[nodemon] 2.0.2[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching dir(s): src/**/*[39m
+[33m[nodemon] watching extensions: ts[39m
+[32m[nodemon] starting `ts-node -r tsconfig-paths/register ./src --env=development`[39m
+events.js:282
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at internal/fs/streams.js:198:12
+    at FSReqCallback.wrapper [as oncomplete] (fs.js:491:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! ConnectedStudents-Backend@0.1.0 start:dev: `nodemon --config nodemon.json`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the ConnectedStudents-Backend@0.1.0 start:dev script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/goldschmitt/.npm/_logs/2020-01-14T12_17_25_500Z-debug.log
+head: Fehler beim Lesen von 'Standardeingabe': Ungültiger Dateideskriptor
+head: -: Ungültiger Dateideskriptor
+
+> ConnectedStudents-Backend@0.1.0 start:dev /media/platte/websites/ConnectedStudents-WebApp
+> nodemon --config nodemon.json
+
+[33m[nodemon] 2.0.2[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching dir(s): src/**/*[39m
+[33m[nodemon] watching extensions: ts[39m
+[32m[nodemon] starting `ts-node -r tsconfig-paths/register ./src --env=development`[39m
+[32minfo[39m: Express server started on port: 3000
+
+> ConnectedStudents-Backend@0.1.0 start:dev /media/platte/websites/ConnectedStudents-WebApp
+> nodemon --config nodemon.json
+
+[33m[nodemon] 2.0.2[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching dir(s): src/**/*[39m
+[33m[nodemon] watching extensions: ts[39m
+[32m[nodemon] starting `ts-node -r tsconfig-paths/register ./src --env=development`[39m
+
+> ConnectedStudents-Backend@0.1.0 start /media/platte/websites/ConnectedStudents-WebApp
+> node -r module-alias/register ./dist
+
+internal/modules/cjs/loader.js:969
+    throw err;
+    ^
+
+Error: Cannot find module '/media/platte/websites/ConnectedStudents-WebApp/dist'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:966:17)
+    at Function.Module._resolveFilename (/media/platte/websites/ConnectedStudents-WebApp/node_modules/module-alias/index.js:49:29)
+    at Function.Module._load (internal/modules/cjs/loader.js:859:27)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:71:12)
+    at internal/main/run_main_module.js:17:47 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! ConnectedStudents-Backend@0.1.0 start: `node -r module-alias/register ./dist`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the ConnectedStudents-Backend@0.1.0 start script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/goldschmitt/.npm/_logs/2020-01-14T12_25_06_826Z-debug.log
+[33m[nodemon] 2.0.2[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching dir(s): src/**/*[39m
+[33m[nodemon] watching extensions: ts[39m
+[32m[nodemon] starting `ts-node -r tsconfig-paths/register ./src --env=development`[39m
+events.js:282
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at internal/fs/streams.js:198:12
+    at FSReqCallback.wrapper [as oncomplete] (fs.js:491:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
+/usr/lib/node_modules/nodemon/lib/nodemon.js:42
+    process.stdout._handle.setBlocking(true); // nodejs/node#6456
+                           ^
+
+TypeError: Cannot read property 'setBlocking' of undefined
+    at nodemon (/usr/lib/node_modules/nodemon/lib/nodemon.js:42:28)
+    at Object.<anonymous> (/usr/lib/node_modules/nodemon/bin/nodemon.js:7:1)
+    at Module._compile (internal/modules/cjs/loader.js:1139:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1159:10)
+    at Module.load (internal/modules/cjs/loader.js:988:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:896:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:71:12)
+    at internal/main/run_main_module.js:17:47
+[33m[nodemon] 2.0.2[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching dir(s): src/**/*[39m
+[33m[nodemon] watching extensions: ts[39m
+--------------
+node: v13.5.0
+nodemon: 2.0.2
+command: /usr/bin/node /usr/bin/nodemon --dump
+cwd: /media/platte/websites/ConnectedStudents-WebApp
+OS: linux x64
+--------------
+{
+  run: false,
+  system: { cwd: '/media/platte/websites/ConnectedStudents-WebApp' },
+  required: false,
+  dirs: [ '/media/platte/websites/ConnectedStudents-WebApp/src' ],
+  timeout: 1000,
+  options: {
+    dump: true,
+    watch: [ 'src', re: /src/ ],
+    ignore: [
+      '**/.git/**',
+      '**/.nyc_output/**',
+      '**/.sass-cache/**',
+      '**/bower_components/**',
+      '**/coverage/**',
+      '**/node_modules/**',
+      'src/public',
+      re: /.*.*\/\.git\/.*.*|.*.*\/\.nyc_output\/.*.*|.*.*\/\.sass\-cache\/.*.*|.*.*\/bower_components\/.*.*|.*.*\/coverage\/.*.*|.*.*\/node_modules\/.*.*|src\/public/
+    ],
+    exec: 'ts-node -r tsconfig-paths/register ./src --env=development',
+    ignoreRoot: [
+      '**/.git/**',
+      '**/.nyc_output/**',
+      '**/.sass-cache/**',
+      '**/bower_components/**',
+      '**/coverage/**',
+      '**/node_modules/**'
+    ],
+    restartable: 'rs',
+    colours: true,
+    execMap: { py: 'python', rb: 'ruby', ts: 'ts-node' },
+    stdin: true,
+    runOnChangeOnly: false,
+    verbose: false,
+    signal: 'SIGUSR2',
+    stdout: true,
+    watchOptions: {},
+    execOptions: {
+      script: null,
+      exec: 'ts-node -r tsconfig-paths/register ./src --env=development',
+      args: [],
+      scriptPosition: null,
+      nodeArgs: undefined,
+      execArgs: [],
+      ext: 'ts',
+      env: {}
+    },
+    monitor: [
+      '/media/platte/websites/ConnectedStudents-WebApp/src/**/*',
+      '!**/.git/**',
+      '!**/.nyc_output/**',
+      '!**/.sass-cache/**',
+      '!**/bower_components/**',
+      '!**/coverage/**',
+      '!**/node_modules/**',
+      '!/media/platte/websites/ConnectedStudents-WebApp/src/public/**/*'
+    ]
+  },
+  load: [Function (anonymous)],
+  reset: [Function: reset],
+  lastStarted: 0,
+  loaded: [ '/media/platte/websites/ConnectedStudents-WebApp/nodemon.json' ],
+  watchInterval: null,
+  signal: 'SIGUSR2',
+  command: {
+    raw: {
+      executable: 'ts-node -r tsconfig-paths/register ./src --env=development',
+      args: []
+    },
+    string: 'ts-node -r tsconfig-paths/register ./src --env=development'
+  }
+}
+--------------
+[32m[nodemon] restarting child process[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32minfo[39m: Express server started on port: 3000
+[0mGET /api/client/getChannel?roomNr=209&buildingNr=01 [32m200 [0m62.058 ms - 152[0m
+[0mGET /api/client/getChannel?roomNr=209&buildingNr=01 [32m200 [0m33.932 ms - 152[0m

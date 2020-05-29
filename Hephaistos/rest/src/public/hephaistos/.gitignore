@@ -1,12 +1,7 @@
-.vscode/
-.ipynb_checkpoints/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-Hephaistos/rest/node_modules
-Hephaistos/rest/public/src/node_modules
-Hephaistos/rest/picture/*.jpg
-Hephaistos/rest/src/dbConnection.ts
+/node_modules
 /.pnp
 .pnp.js
 
