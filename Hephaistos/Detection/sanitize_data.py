@@ -48,7 +48,12 @@ def cat_mask_v1(wr):
     path = data_dir + 'Mask_Dataset_v1/'
     for (dirpath, _, filenames) in os.walk(path):
         if filenames:
-            mask_present = (dirpath.rsplit('/', 1)[1] == 'Mask')
+            # based on windows/unix, the delimiter can be different
+            delimiter = '/'
+            if dirpath.rfind('/') < dirpath.rfind('\\'):
+                delimiter = '\\'
+
+            mask_present = (dirpath.rsplit(delimiter, 1)[1] == 'Mask')
             for img in filenames:
                 # either one persion with and one p without, or vice versa
                 # there are no unknown sources in here
@@ -63,7 +68,13 @@ def cat_withwithout_mask(wr):
     # data/train separation is ignored
     for (dirpath, _, filenames) in os.walk(path):
         if filenames:
-            img_cat = dirpath.rsplit('/', 1)[1]
+
+            # based on windows/unix, the delimiter can be different
+            delimiter = '/'
+            if dirpath.rfind('/') < dirpath.rfind('\\'):
+                delimiter = '\\'
+
+            img_cat = dirpath.rsplit(delimiter, 1)[1]
             mask_present = (img_cat == 'with_mask') or (img_cat == '1')
             for img in filenames:
                 # this pack uses photoshoped masks
