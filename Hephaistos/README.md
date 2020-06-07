@@ -1,12 +1,13 @@
-# HEPAHISTOS
+<img src="res/logo.png" alt="drawing" style="width:200px;"/>
 
-Heuristic epidermological pandemic hypercrisis ADVANCED MASK DETECTION internet supported tensorflow operational service
+# HEPAHISTOS
+#### Heuristic epidermological pandemic hypercrisis Advanced Mask Detection internet supported tensorflow operational service
 
 ---
 
 This service offers an API for detecting people not wearing masks in public areas.
 
-This repo is divided into 2 different parts, ```web``` and ```detection```, both responsible for the API and detection part of this services
+This repo is divided into 2 different parts, ```rest``` and ```detection```, both responsible for the API and detection part of this service.
 
 
 
