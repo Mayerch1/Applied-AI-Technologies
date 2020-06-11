@@ -14,7 +14,7 @@ from sklearn.model_selection import train_test_split
 import os, sys
 from PIL import Image
 import matplotlib.pyplot as plt
-
+import os
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
@@ -40,7 +40,7 @@ def main(path):
     array = tf.keras.preprocessing.image.img_to_array(picture)
     array= np.array([array])  # Convert single image to a batch.
 
-    loaded_model = load_model('saved_model')
+    loaded_model = load_model(os.path.dirname(__file__) + '/saved_model')
     return loaded_model.predict(array)[0][0]
 	# >0 -- > keine Maske
 	# <0 --> Maske
@@ -68,3 +68,6 @@ sys.argv
 
 
 
+
+
+# %%
