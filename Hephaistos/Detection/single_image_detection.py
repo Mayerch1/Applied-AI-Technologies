@@ -1,6 +1,6 @@
 """
-	 >0 -- > keine Maske
-	 <0 --> Maske
+	 0 -- > keine Maske
+	 1 --> Maske
 """
 #!/usr/bin/env python
 # coding: utf-8
@@ -41,9 +41,12 @@ def main(path):
     array= np.array([array])  # Convert single image to a batch.
 
     loaded_model = load_model(os.path.dirname(__file__) + '/saved_model')
-    return loaded_model.predict(array)[0][0]
-	# >0 -- > keine Maske
-	# <0 --> Maske
+    predict=loaded_model.predict(array)[0]
+    predict_class = np.argmax(predict)
+    predict_class = predict_class.tolist()
+    return predict_class
+	# 0 -- > keine Maske
+	# 1 --> Maske
 
 
 # In[ ]:
