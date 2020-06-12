@@ -57,6 +57,7 @@ export const adminMW = async (req: Request, res: Response, next: NextFunction) =
 
 
 
+
 // Middleware to verify if user is an admin
 export const userMW = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -78,3 +79,20 @@ export const userMW = async (req: Request, res: Response, next: NextFunction) =>
         });
     }
 };
+
+
+    // Middleware to verify if user is an admin
+export const getEmail =  async (req: Request) => {
+        // Get json-web-token
+        const jwt = req.signedCookies[jwtCookieProps.key];
+        if (!jwt) {
+            throw Error('JWT not present in signed cookie.');
+        }
+        // Make sure user role is an admin
+        const clientData = await jwtService.decodeJwt(jwt);
+        if (clientData.role === UserRoles.Standard||clientData.role === UserRoles.Admin) {
+            return clientData.email;
+        } else {
+            throw Error('JWT not present in signed cookie.');
+        }
+}

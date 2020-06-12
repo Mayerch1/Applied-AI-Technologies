@@ -94,9 +94,9 @@ class Login extends React.Component<{},ILoginState> {
     var formBody = this.createXurlcodeFromObject(form);
 
     console.log("Folgender Benutzer hat versucht sich einzuloggen:   Benutzername: " + this.state.benutzername + " Passwort: " + this.state.passwort)
-    axios.post('http://localhost:3000/api/auth/login', formBody).then((data) => {
+    axios.post('http://localhost:3000/api/auth/login', formBody, {withCredentials: true}).then((data) => {
       this.setState({ LogInScreen: false });
-      console.log("test")
+      console.log(data);
       var event = new CustomEvent(
         "LogIn",
         {

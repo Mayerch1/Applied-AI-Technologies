@@ -2,15 +2,27 @@
   text-align: center;
 }
 
+img{
+  margin-bottom: 10px;
+}
+
 .white{
   color: white;
   margin: 16px;
 }
 
-.App-logo {
+main{
+margin-top: 100px;
+}
+
+h2{
+  margin-bottom: 100px!important;
+}
+
+/* .App-logo {
   animation: App-logo-spin infinite 0.2s linear;
   pointer-events: none;
-}
+} */
 .Login {
 
    align-content: center
