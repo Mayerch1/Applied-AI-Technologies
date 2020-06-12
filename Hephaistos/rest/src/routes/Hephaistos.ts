@@ -25,34 +25,7 @@ router.post('/detection', userMW,cpUpload, async (req: Request, res: Response, n
             var photo:IPhoto = new Photo(files[key][0].originalname,await userDao.getOne(email))
             fs.writeFileSync( Path.getPath(photo.filename), files[key][0].buffer)
             var result = child.execSync("python3 ../../Hephaistos/Detection/single_image_detection.py " + Path.getPath(photo.filename));
-            hasMask = parseInt(result.toString()) < 0;
-            console.log(result.toString())
-            await photoDao.add(photo)
-        }
-
-        
-        return res.status(OK).json({mask: hasMask}).end();
-    } catch (err) {
-        logger.error(err.message, err);
-        return res.status(BAD_REQUEST).json({
-            error: err.message,
-        });
-    }
-});
-
-
-router.post('/telegramToken', userMW,cpUpload, async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const files:any  = req.files;
-        var email:string =   await getEmail(req);
-        var key:string
-        var hasMask: boolean = false
-        for (key in files) {
-            console.log(files[key][0])
-            var photo:IPhoto = new Photo(files[key][0].originalname,await userDao.getOne(email))
-            fs.writeFileSync( Path.getPath(photo.filename), files[key][0].buffer)
-            var result = child.execSync("python3 ../../Hephaistos/Detection/single_image_detection.py " + Path.getPath(photo.filename));
-            hasMask = parseInt(result.toString()) < 0;
+            hasMask = parseInt(result.toString()) == 0;
             console.log(result.toString())
             await photoDao.add(photo)
         }

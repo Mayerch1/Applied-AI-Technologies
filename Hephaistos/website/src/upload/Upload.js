@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Dropzone from "./Dropzone";
+import passed from '../res/passed.png';
 import Progress from "./Progress";
 import axios from 'axios';
 import './upload.css';
@@ -195,7 +196,7 @@ class Upload extends Component {
                 <img src="https://slm-assets.secondlife.com/assets/7285225/view_large/andreas.jpg" />
           :''}
         {this.state.showMaskPopup && this.state.mask ? 
-                <img src="https://cdn.pixabay.com/photo/2020/06/02/13/11/verified-5250897_960_720.png" /> :''}
+                <img src={passed} /> :''}
       </div>
     );
   }

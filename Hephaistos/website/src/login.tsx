@@ -64,10 +64,10 @@ class Login extends React.Component<{},ILoginState> {
   handleLogout() {
     console.log("Benutzer" + this.state.benutzername + "hat sich ausgeloggt")
     var event = new CustomEvent(
-      "token",
+      "LogIn",
       {
         detail: {
-          token: null
+          LogIn: false
         },
         bubbles: true,
         cancelable: true
