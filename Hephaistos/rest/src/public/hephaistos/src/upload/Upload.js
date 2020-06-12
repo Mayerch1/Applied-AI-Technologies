@@ -192,13 +192,10 @@ class Upload extends Component {
         </div>
         <div className="Actions">{this.renderActions()}</div>
         {this.state.showMaskPopup && !this.state.mask ? 
-          <div className="alert alert-danger" role="alert">
-                <h1>Person without&nbsp;mask recognized!!!</h1>
-          </div>:''}
+                <img src="https://slm-assets.secondlife.com/assets/7285225/view_large/andreas.jpg" />
+          :''}
         {this.state.showMaskPopup && this.state.mask ? 
-          <div className="alert alert-success" role="alert">
-                <h1>Alles Ok :)</h1>
-          </div>:''}
+                <img src="https://cdn.pixabay.com/photo/2020/06/02/13/11/verified-5250897_960_720.png" /> :''}
       </div>
     );
   }

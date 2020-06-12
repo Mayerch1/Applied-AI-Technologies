@@ -57,6 +57,7 @@ CREATE TABLE `users` (
     `role` int  NOT NULL ,
     `email` varchar(255)  NOT NULL ,
     `pwdHash` varchar(255)  NOT NULL ,
+    `telegramToken` varchar(255)  NOT NULL ,
     PRIMARY KEY (
         `id`
     )
@@ -72,7 +73,7 @@ ON `users` (`email`);
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Karl','Marx  ',0,'test@test.com',''),(2,'Einstein ','Albert ',0,'albertostein@physicist.io',''),(3,'Newton ','Isaac ',0,'applehead@trees.oof',''),(4,'Curie ','Marie ',0,'cmglow@google.com',''),(5,'Koch','Robert',0,'',''),(6,'Planck','Max',0,'',''),(7,'Picasso','Pablo',0,'',''),(8,'Escobar','Pablo',0,'',''),(9,'Schiller','Friedrich',0,'',''),(10,'Schiller','Friedrich',0,'',''),(11,'Freeman','Gordan',1,'gordan.freeman@halflife.com','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy'),(12,'Smith','John',1,'jsmith@yahoo.com','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy');
+INSERT INTO `users` VALUES (1,'Karl','Marx  ',0,'test@test.com','',''),(2,'Einstein ','Albert ',0,'albertostein@physicist.io','',''),(3,'Newton ','Isaac ',0,'applehead@trees.oof','',''),(4,'Curie ','Marie ',0,'cmglow@google.com','',''),(5,'Koch','Robert',0,'','',''),(6,'Planck','Max',0,'','',''),(7,'Picasso','Pablo',0,'','',''),(8,'Escobar','Pablo',0,'','',''),(9,'Schiller','Friedrich',0,'','',''),(10,'Schiller','Friedrich',0,'','',''),(11,'Freeman','Gordan',1,'gordan.freeman@halflife.com','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy',''),(12,'Smith','John',1,'jsmith@yahoo.com','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
-import axios from 'axios';
+import logo from './res/logo.png';
+import logosmall from './res/logo_small.png';
 import './App.css';
 import Login from './login';
 import Col from 'react-bootstrap/Col';
@@ -8,7 +8,8 @@ import Row from 'react-bootstrap/Row';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import './bootstrap.min.css';
-import Upload from './upload/Upload'
+import Upload from './upload/Upload';
+
 
 interface IAppState {
   LogInScreen: boolean,
@@ -68,19 +69,29 @@ class App extends React.Component<{},IAppState> {
         />
         <header className="App-header">
           <Navbar bg="dark" variant="dark" expand="lg">
-            <Navbar.Brand href="#home"> <img src={logo} width="50px" height="50px" className="App-logo" alt="logo" /></Navbar.Brand>
+            <Navbar.Brand href="#home"> <img src={logosmall} width="50px" height="50px" className="App-logo" alt="logo" /></Navbar.Brand>
             <Nav className="mr-auto">
               <Nav.Link href="#home">Home</Nav.Link>
             </Nav>
             <Login />
           </Navbar>
-          <h1>Hephaistos</h1>
+
         </header>
         <Row>
           <Col></Col>
           <Col xs={6}>
             <main>
-            {this.state.LogInScreen ? '': <Upload token={this.state} path='' /> }
+            {this.state.LogInScreen ? 
+            <div>
+            <h1>Herzlich Willkommen bei HEPHAISTOS!</h1>
+            <h2>Ihr digitaler Helfer in der Corona-Zeit.</h2>
+            <img src={logo}  className="App-logo" alt="logo" />
+            </div>
+            :
+            <div>
+             <h1>Hier können Sie Bilder hochladen.</h1>
+             <Upload token={this.state} path='' /> 
+            </div> }
             </main>
 
           </Col>

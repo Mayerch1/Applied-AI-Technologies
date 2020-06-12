@@ -4,7 +4,7 @@ import jsonwebtoken, { VerifyErrors } from 'jsonwebtoken';
 
 interface IClientData {
     role: number;
-    user: string;
+    email: string;
 }
 
 export class JwtService {
