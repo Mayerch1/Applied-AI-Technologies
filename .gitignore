@@ -26,3 +26,5 @@ Hephaistos/rest/src/dbConnection.ts
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+Hephaistos/Detection/__pycache__/
