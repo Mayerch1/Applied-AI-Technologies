@@ -36,7 +36,7 @@ class App extends React.Component<{},IAppState> {
    * Token event
    */
   LogIn(e:any) {
-    this.setState({ LogInScreen: false})
+    this.setState({ LogInScreen: !e.detail.LogIn})
   }
 
 /*Popup Window anzeigen*/
