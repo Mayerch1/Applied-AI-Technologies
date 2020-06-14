@@ -1,0 +1,43 @@
+version: '2'
+services:
+
+  db:
+    image: mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: 'HSE'
+      MYSQL_ROOT_PASSWORD: 'letmein'
+    ports:
+      - '3309:3306'
+    expose:
+      # open towards container
+      - '3309'
+      - '3306'
+    volumes:
+     - ./db:/var/lib/mysql
+
+  # website:
+  #   build: .
+  #   command: serve -s build
+  #   volumes:
+  #     - ./website:/usr/app/
+  #     - /usr/app/node_modules
+  #   ports:
+  #     - "9090:5000"
+  #   stdin_open: true
+
+  rest:
+    build: .
+    command: npm start
+    volumes:
+      - ./rest:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "9091:5000"
+    expose:
+      # open towards container
+      - "9091"
+    stdin_open: true
+    depends_on:
+      - db

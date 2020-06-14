@@ -1,0 +1,15 @@
+version: '2'
+services:
+  base:
+    image: node:11
+    volumes:
+    - ./website:/usr/app
+    working_dir: /usr/app
+  install:
+    extends:
+      service: base
+    command: npm install --quiet
+  build:
+    extends:
+      service: base
+    command: npm run build
