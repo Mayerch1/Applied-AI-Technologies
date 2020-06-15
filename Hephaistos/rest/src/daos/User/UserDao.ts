@@ -1,4 +1,4 @@
-import { IUser } from '../../entities/User';
+import { IUser } from '@entities';
 import { pool } from '@dbConnection';
 
 export interface IUserDao {

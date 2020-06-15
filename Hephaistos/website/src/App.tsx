@@ -9,7 +9,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import './bootstrap.min.css';
 import Upload from './upload/Upload';
-
+import {useCookies}from 'react-cookie';
 
 interface IAppState {
   LogInScreen: boolean,
@@ -23,6 +23,8 @@ class App extends React.Component<{},IAppState> {
   /* binden um Zugriff zu bekommen*/
   constructor(props:Readonly<IAppState>) {
     super(props);
+    //const [cookies, setCookie, removeCookie] = useCookies(['']);
+    //console.log(cookies);
     this.state = {
       LogInScreen: true,
       token: '',
@@ -44,6 +46,14 @@ class App extends React.Component<{},IAppState> {
     this.setState({
       showPopup: !this.state.showPopup
     });
+  }
+
+  Navigation():JSX.Element{
+    if ( window.location.pathname == "/settings") {
+      return <a>test</a>;
+      } else {
+       return <div><h1>Hier können Sie Bilder hochladen.</h1><Upload path='' /></div>;
+      }
   }
 
 /* Eingegebene Informationen speichern, umwandeln, in console schreiben und einloggen */
@@ -71,7 +81,8 @@ class App extends React.Component<{},IAppState> {
           <Navbar bg="dark" variant="dark" expand="lg">
             <Navbar.Brand href="#home"> <img src={logosmall} width="50px" height="50px" className="App-logo" alt="logo" /></Navbar.Brand>
             <Nav className="mr-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
+              <Nav.Link href="/home">Home</Nav.Link>
+              <Nav.Link href="/settings">Settings</Nav.Link>
             </Nav>
             <Login />
           </Navbar>
@@ -88,10 +99,8 @@ class App extends React.Component<{},IAppState> {
             <img src={logo}  className="App-logo" alt="logo" />
             </div>
             :
-            <div>
-             <h1>Hier können Sie Bilder hochladen.</h1>
-             <Upload token={this.state} path='' /> 
-            </div> }
+            <this.Navigation />
+            } 
             </main>
 
           </Col>

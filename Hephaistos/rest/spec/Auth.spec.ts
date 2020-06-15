@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 import { BAD_REQUEST, CREATED, OK, UNAUTHORIZED } from 'http-status-codes';
 import { Response, SuperTest, Test } from 'supertest';
-import { IUser, User, UserRoles } from 'entities/User';
+import { IUser, User, UserRoles } from '@entities';
 import { pErr, pwdSaltRounds, jwtCookieProps, loginFailedErr } from '@shared';
 import { UserDao } from '@daos';
 
@@ -55,7 +55,7 @@ describe('UserRouter', () => {
         email: 'jsmith@gmail.com',
         password: 'Password@1'
       };
-      spyOn(UserDao.prototype, 'getOne').and.returnValue(Promise.resolve(null));
+      spyOn(UserDao.prototype, 'getOne').and.returnValue(Promise.resolve(undefined));
       // Call API
       callApi(creds).end((err: Error, res: any) => {
         pErr(err);

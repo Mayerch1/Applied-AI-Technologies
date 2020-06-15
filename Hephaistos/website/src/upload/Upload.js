@@ -65,21 +65,7 @@ class Upload extends Component {
    * Erstellt eine neue Instance der Axios Schnitstelle
    */
   createAxiosInstance() {
-    var instance = axios.create({
-      baseURL: 'http://localhost:3000/api/',
-      timeout: 10000,
-
-      headers: {
-      }
-    });
-
-    instance.interceptors.request.use(
-      config => {
-        config.headers.Authorization = this.props.token
-        return config
-      });
-
-
+    var instance = axios.create();
     return instance;
   }
 
@@ -95,7 +81,7 @@ class Upload extends Component {
       const formData = new FormData();
       formData.append("file", file, file.name);
       formData.append("path", this.props.path);
-      req.post("http://localhost:3000/api/hephaistos/detection", formData, {withCredentials: true}).then((res) => {
+      req.post("/hephaistos/detection", formData, {withCredentials: true}).then((res) => {
   
 
         const copy = { ...this.state.uploadProgress };

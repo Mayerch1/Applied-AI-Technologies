@@ -21,7 +21,7 @@
       "@daos": [
         "src/daos"
       ],
-      "src/entities": [
+      "@entities": [
         "src/entities"
       ],
       "@shared": [
