@@ -22,7 +22,7 @@ class UserDao {
             return res;
         });
     }
-    getApiToken(apiToken) {
+    checkApiToken(apiToken) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const res = yield _dbConnection_1.pool('users')
                 .select()

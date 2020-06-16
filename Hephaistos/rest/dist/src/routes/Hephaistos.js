@@ -15,7 +15,7 @@ const router = express_1.Router();
 const photoDao = new _daos_1.PhotoDao();
 const userDao = new _daos_1.UserDao();
 var cpUpload = upload.fields([{ name: 'file', maxCount: 8 }, { name: 'path', maxCount: 1 }]);
-router.post('/detection', _shared_1.userMW, cpUpload, (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const files = req.files;
         var key;

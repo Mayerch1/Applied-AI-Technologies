@@ -33,7 +33,7 @@ export class UserDao implements IUserDao {
   /**
    * @param apiToken
    */
-  public async getApiToken(apiToken: string): Promise<IUser | undefined> {
+  public async checkApiToken(apiToken: string): Promise<IUser | undefined> {
     const res = await pool<IUser>('users')
       .select()
       .where({

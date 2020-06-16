@@ -4,8 +4,6 @@ import logger from 'morgan';
 import path from 'path';
 import BaseRouter from './routes';
 
-import { Request, Response } from 'express';
-import { jwtCookieProps } from '@shared';
 const cors = require('cors')
 
 // Init express

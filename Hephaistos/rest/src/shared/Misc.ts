@@ -4,7 +4,8 @@ import { UserRoles } from '../entities/User';
 import { logger } from './Logger';
 import { jwtCookieProps } from './cookies';
 import { JwtService } from './JwtService';
-
+import { UserDao } from '@daos';
+const userDao = new UserDao();
 
 
 // Init shared
@@ -81,10 +82,58 @@ export const userMW = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 
+// Middleware to verify if user is an admin
+export const APIMW = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // Get json-web-token
+        const jwt = req.signedCookies[jwtCookieProps.key];
+        if (!jwt) {
+            if(req.headers.authorization?.includes('Token:'))
+            {
+                var apitoken = req.headers.authorization.replace('Token:', '');
+                var api = !!(await userDao.checkApiToken(apitoken));
+                if (api)
+                {
+                    next();
+                }
+                return;
+            }
+        }
+        // Make sure user role is an admin
+        const clientData = await jwtService.decodeJwt(jwt);
+        if (clientData.role === UserRoles.Standard||clientData.role === UserRoles.Admin) {
+            next();
+        } else {
+            throw Error('JWT not present in signed cookie.');
+        }
+    } catch (err) {
+        return res.status(UNAUTHORIZED).json({
+            error: err.message,
+        });
+    }
+};
+
+
+
     // Middleware to verify if user is an admin
 export const getEmail =  async (req: Request) => {
         // Get json-web-token
+
         const jwt = req.signedCookies[jwtCookieProps.key];
+
+        if (!jwt) {
+            if(req.headers.authorization?.includes('Token:'))
+            {
+                var apitoken = req.headers.authorization.replace('Token:', '');
+                var user = await userDao.checkApiToken(apitoken);
+                if (user)
+                {
+                    return user.email;
+                }
+                return  '';
+            }
+        } 
+
         if (!jwt) {
             throw Error('JWT not present in signed cookie.');
         }
