@@ -3,7 +3,7 @@ import { BAD_REQUEST, CREATED, OK } from 'http-status-codes';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { UserDao } from '@daos';
 import { paramMissingError, logger, adminMW, userMW, getEmail } from '@shared';
-import { UserRoles } from '../entities/User';
+import { UserRoles } from '@entities';
 import { v4 as uuid } from 'uuid';
 
 // Init shared

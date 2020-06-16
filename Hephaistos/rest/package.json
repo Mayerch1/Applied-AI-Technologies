@@ -10,11 +10,11 @@
     "debug": "nodemon --config nodemon.json  "
   },
   "_moduleAliases": {
-    "@daos": "src/daos",
-    "src/entities": "src/entities",
-    "@shared": "src/shared",
-    "@dbConnection": "src/dbConnection",
-    "@server": "src/Server"
+    "@daos": "dist/daos",
+    "@entities": "dist/entities",
+    "@shared": "dist/shared",
+    "@dbConnection": "dist/dbConnection",
+    "@server": "dist/Server"
   },
   "dependencies": {
     "@types/jest": "^25.2.3",

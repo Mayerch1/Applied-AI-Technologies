@@ -5,7 +5,7 @@ import multer from 'multer';
 import * as fs from 'fs'
 import {logger, userMW,  getEmail, APIMW } from '@shared';
 import { NextFunction } from 'express-serve-static-core';
-import { Photo, IPhoto } from '../entities/Photo';
+import { Photo, IPhoto } from '@entities';
 import { Path } from '../helper/Path';
 import * as child from 'child_process';
 

@@ -1,5 +1,5 @@
 import { pool } from '@dbConnection';
-import { IPhoto } from '../../entities/Photo';
+import { IPhoto } from '@entities';
 
 
 export interface IPhotoDao {
