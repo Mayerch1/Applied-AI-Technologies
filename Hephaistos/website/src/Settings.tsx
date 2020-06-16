@@ -1,35 +1,44 @@
 import React, { MouseEvent, FormEvent } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormGroup from 'react-bootstrap/FormGroup';
 
+type FormControlElement =
+  | HTMLInputElement
+  | HTMLSelectElement
+  | HTMLTextAreaElement;
 interface IUserState {
     email: string,
-    settings: boolean,
     password: string,
-    firstname: string,
+    passwordConfirm: string,
+    name: string,
     surname: string,
-    telegram: string,
+    chatID: string,
     apiToken: string,
 }
 
-class Login extends React.Component<{},IUserState> {
-  /* handle binds und Variablen für Benutzername Passwort und Loginscreen */
+class Settings extends React.Component<{},IUserState> {
+  /* handle binds und Variablen für Settingsscreen */
   constructor(props: Readonly<IUserState>) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.NewApiKey = this.NewApiKey.bind(this);
     this.state = {
       email: '',
-      settings: false,
       password: '',
-      firstname: '',
+      passwordConfirm: '',
+      name: '',
       surname: '',
-      telegram: '',
+      chatID: '',
       apiToken: ''
     };
+
+    axios.get("/users/get", {withCredentials: true}).then((res:AxiosResponse) => {
+      console.log(res.data);
+      this.setState( res.data);
+    });
 
   }
 
@@ -43,56 +52,77 @@ class Login extends React.Component<{},IUserState> {
     }
     return formBody.join("&");
   }
+  
+  /**
+   * submit
+   * @param {event} event 
+   */
+  NewApiKey(event:any) {
+    event.preventDefault();
 
-  /* Benutzernamen updaten */
-  updateInputValue(evt:any) {
-    this.setState({ email: evt.currentTarget.value });
-  }
-
-  /* Passwort updaten */
-  updatePasswortValue(evt: React.ChangeEvent<any>) {
-    this.setState({ password: evt.currentTarget.value });
+    axios.get('/users/NewApiToken', {withCredentials: true}).then((res:AxiosResponse) => {
+      this.setState(res.data)
+    }).catch(res => console.log(res))
   }
 
   /**
-   * login
+   * submit
    * @param {event} event 
    */
   handleSubmit(event:any) {
     event.preventDefault();
     console.log(event);
-    var form = {
-      password: this.state.password
-    }
 
-    var formBody = this.createXurlcodeFromObject(form);
+    var formBody = this.createXurlcodeFromObject(this.state);
 
-    axios.post('/auth/login', formBody, {withCredentials: true}).then((data) => {
+    axios.put('/users/update', formBody, {withCredentials: true}).then((data) => {
     }).catch(res => console.log(res))
   }
 
-  /* LoginScreen mit "Login" und "Passwort vergessen?" rendern, falls nicht eingeloggt, sonst Logout und Hilfe anzeigen */
+  /* SettingScreen */
   render() {
-    if (this.state.settings === true) {
       return (
           <Form onSubmit={this.handleSubmit}>
               <FormGroup>
-                <label htmlFor="username"></label>
-
-              <Form.Control type="text" placeholder="username" value={this.state.email} onChange={evt => this.updateInputValue(evt)} />
-
+                  <label htmlFor="email">E-Mail-Adresse</label>
+                  <Form.Control type="email" id="email" placeholder="email" value={this.state.email}  disabled={true} />
               </FormGroup>
-
-              <Form.Control type="password" placeholder="password" value={this.state.password} onChange={evt => this.updatePasswortValue(evt)} />
+              <FormGroup>
+                <label htmlFor="password">New Password</label>
+                <Form.Control id="password" type="password" placeholder="Password" value={this.state.password} onChange={evt => this.setState({password: evt.currentTarget.value})} />
+              </FormGroup>
+              <FormGroup>
+                <label htmlFor="password">Password confirm</label>
+                <Form.Control id="password_confirm" type="password" placeholder="Password confirm" value={this.state.passwordConfirm} onChange={evt => this.setState({passwordConfirm: evt.currentTarget.value})} />
+              </FormGroup>
+              <FormGroup>
+                  <label htmlFor="name">Name</label>
+                  <Form.Control id="name" placeholder="Name" value={this.state.name} required onChange={evt => this.setState({name: evt.currentTarget.value})}/>
+              </FormGroup>
+              <FormGroup>
+                <label htmlFor="surname">Surname</label>
+                <Form.Control id="surname" placeholder="Surname" value={this.state.surname} required onChange={evt => this.setState({surname: evt.currentTarget.value})} />
+              </FormGroup>
+              <FormGroup>
+                <label htmlFor="chatId">Telegram Chat Id</label>
+                <Form.Control id="chatId" type="token" placeholder="Telegram Chat Id" value={this.state.chatID} onChange={evt => this.setState({chatID: evt.currentTarget.value})} />
+              </FormGroup>
+              <FormGroup>
+              <label htmlFor="token">Api-Token</label>
+              <InputGroup>
+                <Form.Control id="token" type="text" placeholder="Api-Token" value={this.state.apiToken} disabled={true} />
+                <div className="input-group-append">
+                    <Button onClick={this.NewApiKey}>New Api-Token</Button>
+                </div>    
+              </InputGroup>
+              </FormGroup>
+              <FormGroup>
+              <Button type="submit">Submit</Button>
+              </FormGroup>
           </Form>
       );
     }
-    else {
-      return (
-        ""
-      );
-    }
-  }
+  
 }
 
-export default Login;
+export default Settings;

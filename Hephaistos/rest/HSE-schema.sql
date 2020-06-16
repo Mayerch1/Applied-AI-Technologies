@@ -57,8 +57,8 @@ CREATE TABLE `users` (
     `role` int  NOT NULL ,
     `email` varchar(255)  NOT NULL ,
     `pwdHash` varchar(255)  NOT NULL ,
-    `telegram` varchar(255)  NOT NULL ,
-    `apitoken` varchar(255)  NOT NULL ,
+    `chatID` varchar(255)  NOT NULL ,
+    `apiToken` varchar(255)  NOT NULL ,
     PRIMARY KEY (
         `id`
     )

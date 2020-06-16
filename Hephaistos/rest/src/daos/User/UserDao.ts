@@ -14,11 +14,30 @@ export class UserDao implements IUserDao {
    * @param email
    */
   public async getOne(email: string): Promise<IUser | undefined> {
-    console.log('getOne');
     const res = await pool<IUser>('users')
       .select()
       .where({
         email: email
+      })
+      .then(resp => {
+        let res = resp[0];
+        return res;
+      })
+      .catch(err => {
+        console.log(err);
+        return undefined;
+      });
+    return res;
+  }
+
+  /**
+   * @param apiToken
+   */
+  public async getApiToken(apiToken: string): Promise<IUser | undefined> {
+    const res = await pool<IUser>('users')
+      .select()
+      .where({
+        apiToken: apiToken
       })
       .then(resp => {
         let res = resp[0];
@@ -86,7 +105,9 @@ export class UserDao implements IUserDao {
         .update({
           surname: user.surname,
           name: user.name,
-          email: user.email
+          email: user.email,
+          apiToken: user.apiToken,
+          chatID: user.chatID
         })
         .then(response => {
           console.log(response);

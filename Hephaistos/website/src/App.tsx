@@ -9,7 +9,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import './bootstrap.min.css';
 import Upload from './upload/Upload';
-import {useCookies}from 'react-cookie';
+import  Settings from './Settings';
 
 interface IAppState {
   LogInScreen: boolean,
@@ -50,7 +50,7 @@ class App extends React.Component<{},IAppState> {
 
   Navigation():JSX.Element{
     if ( window.location.pathname == "/settings") {
-      return <a>test</a>;
+      return <Settings />;
       } else {
        return <div><h1>Hier können Sie Bilder hochladen.</h1><Upload path='' /></div>;
       }

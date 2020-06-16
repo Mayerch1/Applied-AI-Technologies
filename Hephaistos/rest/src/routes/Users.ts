@@ -2,8 +2,9 @@ import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, CREATED, OK } from 'http-status-codes';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { UserDao } from '@daos';
-import { paramMissingError, logger, adminMW } from '@shared';
+import { paramMissingError, logger, adminMW, userMW, getEmail } from '@shared';
 import { UserRoles } from '../entities/User';
+import { v4 as uuid } from 'uuid';
 
 // Init shared
 const router = Router();
@@ -25,6 +26,50 @@ router.get('/all', adminMW, async (req: Request, res: Response) => {
         });
     }
 });
+
+/******************************************************************************
+ *                      Get All Users - "GET /api/users/get"
+ ******************************************************************************/
+
+router.get('/get', userMW, async (req: Request, res: Response) => {
+    try {
+        var email:string = await getEmail(req);
+        const users = await userDao.getOne(email);
+        return res.status(OK).json({email: users?.email,
+                                    name: users?.name, 
+                                    surname: users?.surname,
+                                    chatID: users?.chatID,
+                                    apiToken: users?.apiToken });
+    } catch (err) {
+        logger.error(err.message, err);
+        return res.status(BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+});
+
+/******************************************************************************
+ *                      Get All Users - "GET /api/users/NewApiToken"
+ ******************************************************************************/
+
+router.get('/NewApiToken', userMW, async (req: Request, res: Response) => {
+    try {
+        var email:string = await getEmail(req);
+        const user = await userDao.getOne(email);
+        if(!user){
+            throw new Error("User Not LoggedIn");
+        }
+        user.apiToken =  Buffer.from(uuid().toLowerCase().replace('-', ''), "ascii").toString("base64");
+        await userDao.update(user);
+        return res.status(OK).json({apiToken: user.apiToken });
+    } catch (err) {
+        logger.error(err.message, err);
+        return res.status(BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+});
+
 
 
 /******************************************************************************
@@ -60,14 +105,22 @@ router.post('/add', adminMW, async (req: Request, res: Response) => {
 router.put('/update', adminMW, async (req: Request, res: Response) => {
     try {
         // Check Parameters
-        const { user } = req.body;
+        const user = req.body;
+        var email:string = await getEmail(req);
+        const userDatabase = await userDao.getOne(email);
+        user.email = email;
+        user.apiToken = userDatabase?.apiToken;
+
+        if (req.body.PasswordConfirm !== req.body.Password){
+            throw new Error("Password not invalid");
+        }
         if (!user) {
             return res.status(BAD_REQUEST).json({
                 error: paramMissingError,
             });
         }
         // Update user
-        user.id = Number(user.id);
+        user.id = Number(userDatabase?.id);
         await userDao.update(user);
         return res.status(OK).end();
     } catch (err) {
