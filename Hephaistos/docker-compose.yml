@@ -22,7 +22,7 @@ services:
     command: serve -s build
     volumes:
       - ./website:/usr/app/
-      - /usr/app/node_modules
+      - /usr/app/node_modules      
     ports:
       - "9090:5000"
     stdin_open: true
@@ -33,6 +33,7 @@ services:
     volumes:
       - ./rest:/usr/app/
       - /usr/app/node_modules
+      - ./Detection:/usr/Detection
     ports:
       - "9091:3000"
     expose:
