@@ -10,17 +10,12 @@
 
 import sys 
 import numpy as np
-from sklearn.model_selection import train_test_split
 import os, sys
-from PIL import Image
-import matplotlib.pyplot as plt
 import os
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.models import save_model, load_model
+from tensorflow.keras.models import load_model
 
 #print ('Number of arguments:', len(sys.argv), 'arguments.')
 #print ('Argument List:', str(sys.argv))

@@ -21,9 +21,9 @@
     "typescript": "^3.7.5"
   },
   "devDependencies": {
-    "@types/universal-cookie": "git+ssh://git@github.com:S64/types-universal-cookie.git#v2.1.2-2",
-    "@types/universal-cookie-express": "git+ssh://git@github.com:S64/types-universal-cookie-express.git#v2.1.2-2",
-    "@types/react-cookie": "git+ssh://git@github.com:S64/types-react-cookie.git#v2.1.2-2"
+    "@types/universal-cookie": "git+https://github.com:S64/types-universal-cookie.git#v2.1.2-2",
+    "@types/universal-cookie-express": "git+https://github.com/S64/types-universal-cookie-express.git",
+    "@types/react-cookie": "git+https://github.com:S64/types-react-cookie.git#v2.1.2-2"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -97,7 +97,7 @@ class Login extends React.Component<{},ILoginState> {
     axios.post('/auth/login', formBody, {withCredentials: true}).then((data) => {
       this.setState({ LogInScreen: false });
       console.log(data);
-      var event = new CustomEvent(
+      event = new CustomEvent(
         "LogIn",
         {
           detail: {

@@ -1,7 +1,6 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import logger from 'morgan';
-import path from 'path';
 import BaseRouter from './routes';
 
 const cors = require('cors')

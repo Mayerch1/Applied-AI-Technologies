@@ -27,8 +27,9 @@ router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1
         for (key in files) {
             console.log(files[key][0]);
             var photo = new _entities_1.Photo(files[key][0].originalname, user);
+            //mkdir
             fs.writeFileSync(Path_1.Path.getPath(photo.filename), files[key][0].buffer);
-            var result = child.execSync("python3 ../../Hephaistos/Detection/single_image_detection.py " + Path_1.Path.getPath(photo.filename));
+            var result = child.execSync("python3 ../Detection/single_image_detection.py " + Path_1.Path.getPath(photo.filename));
             hasMask = parseInt(result.toString()) == 0;
             console.log(result.toString());
             yield photoDao.add(photo);
