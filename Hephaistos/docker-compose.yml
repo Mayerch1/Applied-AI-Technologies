@@ -17,24 +17,24 @@ services:
     volumes:
      - ./db:/var/lib/mysql
 
-  # website:
-  #   build: .
-  #   command: serve -s build
-  #   volumes:
-  #     - ./website:/usr/app/
-  #     - /usr/app/node_modules
-  #   ports:
-  #     - "9090:5000"
-  #   stdin_open: true
+  website:
+    build: ./website
+    command: serve -s build
+    volumes:
+      - ./website:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "9090:5000"
+    stdin_open: true
 
   rest:
-    build: .
-    command: npm start
+    build: ./rest
+    command: node -r module-alias/register ./dist --env=development
     volumes:
       - ./rest:/usr/app/
       - /usr/app/node_modules
     ports:
-      - "9091:5000"
+      - "9091:3000"
     expose:
       # open towards container
       - "9091"
