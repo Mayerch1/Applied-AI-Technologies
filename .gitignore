@@ -6,7 +6,6 @@
 Hephaistos/rest/node_modules
 Hephaistos/rest/public/src/node_modules
 Hephaistos/rest/picture/*.jpg
-Hephaistos/rest/src/dbConnection.ts
 /.pnp
 .pnp.js
 

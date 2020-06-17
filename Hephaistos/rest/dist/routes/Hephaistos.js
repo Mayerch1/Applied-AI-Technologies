@@ -20,6 +20,11 @@ var cpUpload = upload.fields([{ name: 'file', maxCount: 8 }, { name: 'path', max
 router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const files = req.files;
+        if (!files) {
+            return res.status(http_status_codes_1.BAD_REQUEST).json({
+                error: "No File Uploaded",
+            });
+        }
         var key;
         var email = yield _shared_1.getEmail(req);
         var user = yield userDao.getOne(email);
@@ -41,8 +46,8 @@ router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1
     }
     catch (err) {
         _shared_1.logger.error(err.message, err);
-        return res.status(http_status_codes_1.BAD_REQUEST).json({
-            error: err.message,
+        return res.status(http_status_codes_1.INTERNAL_SERVER_ERROR).json({
+            error: "Internal Server Error",
         });
     }
 }));

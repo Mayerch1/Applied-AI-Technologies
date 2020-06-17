@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express';
-import { BAD_REQUEST, OK, UNAUTHORIZED } from 'http-status-codes';
+import { BAD_REQUEST, OK, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { UserDao, PhotoDao } from '@daos';
 import multer from 'multer';
 import * as fs from 'fs'
-import {logger, userMW,  getEmail, APIMW } from '@shared';
+import {logger, getEmail, APIMW } from '@shared';
 import { NextFunction } from 'express-serve-static-core';
 import { Photo, IPhoto } from '@entities';
 import { Path } from '../helper/Path';
@@ -19,6 +19,13 @@ var cpUpload = upload.fields([{ name: 'file', maxCount: 8 }, { name: 'path', max
 router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const files:any  = req.files;
+        if(!files)
+        {
+            return res.status(BAD_REQUEST).json({
+                error: "No File Uploaded",
+            });
+        }
+
         var key:string
         var email:string =   await getEmail(req);
         var user =  await userDao.getOne(email)
@@ -41,8 +48,8 @@ router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, ne
         return res.status(OK).json({mask: hasMask}).end();
     } catch (err) {
         logger.error(err.message, err);
-        return res.status(BAD_REQUEST).json({
-            error: err.message,
+        return res.status(INTERNAL_SERVER_ERROR).json({
+            error: "Internal Server Error",
         });
     }
 });
