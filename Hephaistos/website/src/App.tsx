@@ -49,7 +49,7 @@ class App extends React.Component<{},IAppState> {
   }
 
   Navigation():JSX.Element{
-    if ( window.location.pathname == "/settings") {
+    if ( window.location.pathname === "/settings") {
       return <Settings />;
       } else {
        return <div><h1>Hier können Sie Bilder hochladen.</h1><Upload path='' /></div>;

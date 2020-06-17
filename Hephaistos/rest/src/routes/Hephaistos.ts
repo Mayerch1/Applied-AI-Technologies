@@ -8,6 +8,8 @@ import { NextFunction } from 'express-serve-static-core';
 import { Photo, IPhoto } from '@entities';
 import { Path } from '../helper/Path';
 import * as child from 'child_process';
+import { get } from 'https';
+import { env } from 'process';
 
 const upload = multer() // for parsing multipart/form-data
 const router = Router();
@@ -19,15 +21,20 @@ router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, ne
         const files:any  = req.files;
         var key:string
         var email:string =   await getEmail(req);
+        var user =  await userDao.getOne(email)
         var hasMask: boolean = false
         for (key in files) {
             console.log(files[key][0])
-            var photo:IPhoto = new Photo(files[key][0].originalname,await userDao.getOne(email))
+            var photo:IPhoto = new Photo(files[key][0].originalname,user)
             fs.writeFileSync( Path.getPath(photo.filename), files[key][0].buffer)
             var result = child.execSync("python3 ../../Hephaistos/Detection/single_image_detection.py " + Path.getPath(photo.filename));
             hasMask = parseInt(result.toString()) == 0;
             console.log(result.toString())
             await photoDao.add(photo)
+        }
+        if(!hasMask){
+            var url = 'https://api.telegram.org/bot'+ env.TelegramToken + '/sendMessage?chat_id=' + user?.chatID + "&text=Achtung eine Person ohne Maske ist eingedrungen!!!";
+            get(url)
         }
 
         

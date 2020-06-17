@@ -11,7 +11,7 @@ res/tmp
 *.suo
 *.user
 *.sln.docstates
-
+.env.local
 # Build results
 
 [Dd]ebug/

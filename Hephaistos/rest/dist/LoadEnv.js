@@ -11,9 +11,14 @@ const options = command_line_args_1.default([
         type: String,
     },
 ]);
-const result2 = dotenv_1.default.config({
-    path: `./env/${options.env}.env`,
+var result2 = dotenv_1.default.config({
+    path: `./.env.local/${options.env}.env`,
 });
 if (result2.error) {
-    throw result2.error;
+    result2 = dotenv_1.default.config({
+        path: `./env/${options.env}.env`,
+    });
+    if (result2.error) {
+        throw result2.error;
+    }
 }

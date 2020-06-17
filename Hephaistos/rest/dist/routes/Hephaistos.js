@@ -10,6 +10,8 @@ const _shared_1 = require("@shared");
 const _entities_1 = require("@entities");
 const Path_1 = require("../helper/Path");
 const child = tslib_1.__importStar(require("child_process"));
+const https_1 = require("https");
+const process_1 = require("process");
 const upload = multer_1.default();
 const router = express_1.Router();
 const photoDao = new _daos_1.PhotoDao();
@@ -20,15 +22,20 @@ router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1
         const files = req.files;
         var key;
         var email = yield _shared_1.getEmail(req);
+        var user = yield userDao.getOne(email);
         var hasMask = false;
         for (key in files) {
             console.log(files[key][0]);
-            var photo = new _entities_1.Photo(files[key][0].originalname, yield userDao.getOne(email));
+            var photo = new _entities_1.Photo(files[key][0].originalname, user);
             fs.writeFileSync(Path_1.Path.getPath(photo.filename), files[key][0].buffer);
             var result = child.execSync("python3 ../../Hephaistos/Detection/single_image_detection.py " + Path_1.Path.getPath(photo.filename));
             hasMask = parseInt(result.toString()) == 0;
             console.log(result.toString());
             yield photoDao.add(photo);
+        }
+        if (!hasMask) {
+            var url = 'https://api.telegram.org/bot' + process_1.env.TelegramToken + '/sendMessage?chat_id=' + (user === null || user === void 0 ? void 0 : user.chatID) + "&text=Achtung eine Person ohne Maske ist eingedrungen!!!";
+            https_1.get(url);
         }
         return res.status(http_status_codes_1.OK).json({ mask: hasMask }).end();
     }

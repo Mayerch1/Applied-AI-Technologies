@@ -179,10 +179,10 @@ class Upload extends Component {
         </div>
         <div className="Actions">{this.renderActions()}</div>
         {this.state.showMaskPopup && !this.state.mask ? 
-                <img src="https://slm-assets.secondlife.com/assets/7285225/view_large/andreas.jpg" />
+                <img src="https://slm-assets.secondlife.com/assets/7285225/view_large/andreas.jpg" alt="Not Passed" />
           :''}
         {this.state.showMaskPopup && this.state.mask ? 
-                <img src={passed} /> :''}
+                <img src={passed}  alt="passed"/> :''}
       </div>
     );
   }
