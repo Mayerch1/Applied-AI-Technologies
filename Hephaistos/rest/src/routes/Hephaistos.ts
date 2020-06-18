@@ -7,10 +7,12 @@ import {logger, getEmail, APIMW } from '@shared';
 import { NextFunction } from 'express-serve-static-core';
 import { Photo, IPhoto } from '@entities';
 import { Path } from '../helper/Path';
-import * as child from 'child_process';
-import { get } from 'https';
+import * as p from 'path';
+import { get as gets } from 'https';
 import { env } from 'process';
+import { pathToFileURL } from 'url';
 
+const axios = require('axios')
 const upload = multer() // for parsing multipart/form-data
 const router = Router();
 const photoDao = new PhotoDao();
@@ -33,15 +35,20 @@ router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, ne
         for (key in files) {
             console.log(files[key][0])
             var photo:IPhoto = new Photo(files[key][0].originalname,user)
+            if(!fs.existsSync("../picture"))
+            {
+                fs.mkdirSync("../picture")
+            }
             fs.writeFileSync( Path.getPath(photo.filename), files[key][0].buffer)
-            var result = child.execSync("python3 ../Detection/single_image_detection.py " + Path.getPath(photo.filename));
+            var result = await axios.post("http://localhost:8898/hooks", Path.getPath(photo.filename)  )
+            //var result = child.execSync("python3 ../Detection/single_image_detection.py " + Path.getPath(photo.filename));
             hasMask = parseInt(result.toString()) == 0;
             console.log(result.toString())
             await photoDao.add(photo)
         }
         if(!hasMask){
             var url = 'https://api.telegram.org/bot'+ env.TelegramToken + '/sendMessage?chat_id=' + user?.chatID + "&text=Achtung eine Person ohne Maske ist eingedrungen!!!";
-            get(url)
+            gets(url)
         }
 
         

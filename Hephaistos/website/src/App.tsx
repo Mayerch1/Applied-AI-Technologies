@@ -10,30 +10,57 @@ import Nav from 'react-bootstrap/Nav';
 import './bootstrap.min.css';
 import Upload from './upload/Upload';
 import  Settings from './Settings';
+import axios from 'axios';
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies, ReactCookieProps } from 'react-cookie';
 
 interface IAppState {
   LogInScreen: boolean,
-  token: string
   showPopup: boolean
+
 }
 
+interface Props extends ReactCookieProps {
 
-class App extends React.Component<{},IAppState> {
+}
+class App extends React.Component<Props,IAppState> {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
 
   /* binden um Zugriff zu bekommen*/
-  constructor(props:Readonly<IAppState>) {
+  constructor(props:Readonly<Props>) {
     super(props);
-    //const [cookies, setCookie, removeCookie] = useCookies(['']);
-    //console.log(cookies);
+
+    window.addEventListener('popstate', () => this.forceUpdate());
+
+    // Add a response interceptor
+    axios.interceptors.response.use((response) => {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
+    }, error => {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      if(error.toString().includes("401"))
+      {
+        this.setState({LogInScreen: true})
+      }
+      return Promise.reject(error);
+    });
+
+
     this.state = {
       LogInScreen: true,
-      token: '',
       showPopup: false
     };  
     this.LogIn = this.LogIn.bind(this);
     window.addEventListener('LogIn', this.LogIn, false);
 
   }
+
+
   /**
    * Token event
    */
@@ -49,7 +76,7 @@ class App extends React.Component<{},IAppState> {
   }
 
   Navigation():JSX.Element{
-    if ( window.location.pathname === "/settings") {
+    if ( window.location.hash === "#settings") {
       return <Settings />;
       } else {
        return <div><h1>Hier können Sie Bilder hochladen.</h1><Upload path='' /></div>;
@@ -81,8 +108,8 @@ class App extends React.Component<{},IAppState> {
           <Navbar bg="dark" variant="dark" expand="lg">
             <Navbar.Brand href="#home"> <img src={logosmall} width="50px" height="50px" className="App-logo" alt="logo" /></Navbar.Brand>
             <Nav className="mr-auto">
-              <Nav.Link href="/home">Home</Nav.Link>
-              <Nav.Link href="/settings">Settings</Nav.Link>
+              <Nav.Link href="#home" >Home</Nav.Link>
+              <Nav.Link href="#settings">Settings</Nav.Link>
             </Nav>
             <Login />
           </Navbar>
@@ -112,4 +139,4 @@ class App extends React.Component<{},IAppState> {
   }
 };
 
-export default App;
+export default withCookies(App);

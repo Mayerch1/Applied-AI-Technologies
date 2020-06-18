@@ -43,11 +43,6 @@ class Login extends React.Component<{},ILoginState> {
       showPopup: !this.state.showPopup
     });
   }
-  /* Respnse text in Konsole schreiben */
-  handleResponse(response: Response) {
-    console.log(response.text());
-
-  }
 
   /* Xurl code generieren */
   createXurlcodeFromObject(obj:any) {
@@ -62,7 +57,6 @@ class Login extends React.Component<{},ILoginState> {
 
   /* Logout - Token löschen, Passwort löschen und Login Screen zeigen - Benutzername bleibt gespeichert */
   handleLogout() {
-    console.log("Benutzer" + this.state.benutzername + "hat sich ausgeloggt")
     var event = new CustomEvent(
       "LogIn",
       {
@@ -85,7 +79,6 @@ class Login extends React.Component<{},ILoginState> {
    */
   handleSubmit(event:any) {
     event.preventDefault();
-    console.log(event);
     var form = {
       email: this.state.benutzername,
       password: this.state.passwort
@@ -93,10 +86,8 @@ class Login extends React.Component<{},ILoginState> {
 
     var formBody = this.createXurlcodeFromObject(form);
 
-    console.log("Folgender Benutzer hat versucht sich einzuloggen:   Benutzername: " + this.state.benutzername + " Passwort: " + this.state.passwort)
     axios.post('/auth/login', formBody, {withCredentials: true}).then((data) => {
       this.setState({ LogInScreen: false });
-      console.log(data);
       event = new CustomEvent(
         "LogIn",
         {

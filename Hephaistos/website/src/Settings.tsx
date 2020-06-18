@@ -36,7 +36,6 @@ class Settings extends React.Component<{},IUserState> {
     };
 
     axios.get("/users/get", {withCredentials: true}).then((res:AxiosResponse) => {
-      console.log(res.data);
       this.setState( res.data);
     });
 
@@ -71,7 +70,6 @@ class Settings extends React.Component<{},IUserState> {
    */
   handleSubmit(event:any) {
     event.preventDefault();
-    console.log(event);
 
     var formBody = this.createXurlcodeFromObject(this.state);
 

@@ -8,7 +8,6 @@ import './upload.css';
 class Upload extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       files: [],
       uploading: false,
@@ -60,28 +59,17 @@ class Upload extends Component {
       this.setState({ successfullUploaded: true, uploading: false });
     }
   }
-
-  /**
-   * Erstellt eine neue Instance der Axios Schnitstelle
-   */
-  createAxiosInstance() {
-    var instance = axios.create();
-    return instance;
-  }
-
   /**
    * Sendet den Request zum Server
    * @param {file} file 
    */
   sendRequest(file) {
     return new Promise((resolve, reject) => {
-      const req = this.createAxiosInstance();
-
 
       const formData = new FormData();
       formData.append("file", file, file.name);
       formData.append("path", this.props.path);
-      req.post("/hephaistos/detection", formData, {withCredentials: true}).then((res) => {
+      axios.post("/hephaistos/detection", formData, {withCredentials: true}).then((res) => {
   
 
         const copy = { ...this.state.uploadProgress };
@@ -89,9 +77,8 @@ class Upload extends Component {
         copy[file.name] = { state: "done", percentage: 100 };
 
         this.setState({ uploadProgress: copy, showMaskPopup: true, mask: res.data.mask });
-        console.log(copy)
-        console.log(copy)
-        resolve(req);
+
+        resolve(res);
       }
       ).catch((req) => {
         const copy = { ...this.state.uploadProgress };
