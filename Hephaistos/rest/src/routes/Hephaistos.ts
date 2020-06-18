@@ -7,10 +7,8 @@ import {logger, getEmail, APIMW } from '@shared';
 import { NextFunction } from 'express-serve-static-core';
 import { Photo, IPhoto } from '@entities';
 import { Path } from '../helper/Path';
-import * as p from 'path';
 import { get as gets } from 'https';
 import { env } from 'process';
-import { pathToFileURL } from 'url';
 
 const axios = require('axios')
 const upload = multer() // for parsing multipart/form-data
@@ -40,7 +38,7 @@ router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, ne
                 fs.mkdirSync("../picture")
             }
             fs.writeFileSync( Path.getPath(photo.filename), files[key][0].buffer)
-            var result = await axios.post("http://localhost:8898/hooks", Path.getPath(photo.filename)  )
+            var result = await axios.post("http://"+ env.PyDetect + "/hooks", Path.getPath(photo.filename)  )
             //var result = child.execSync("python3 ../Detection/single_image_detection.py " + Path.getPath(photo.filename));
             hasMask = parseInt(result.toString()) == 0;
             console.log(result.toString())
