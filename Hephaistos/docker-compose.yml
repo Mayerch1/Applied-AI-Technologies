@@ -17,6 +17,17 @@ services:
     volumes:
      - ./db:/var/lib/mysql
 
+
+  pydetect:
+    build: ./Detection
+    command: python3 single_image_detection.py
+    volumes:
+      - ./Detection:/usr/app/
+      - ./picture:/usr/picture
+    expose:
+      # unsecured connection, only expose within container
+      - '8988'
+
   website:
     build: ./website
     command: serve -s build
@@ -27,13 +38,14 @@ services:
       - "9090:5000"
     stdin_open: true
 
+
   rest:
     build: ./rest
     command: node -r module-alias/register ./dist --env=development
     volumes:
       - ./rest:/usr/app/
       - /usr/app/node_modules
-      - ./Detection:/usr/Detection
+      - ./picture:/usr/picture
     ports:
       - "9091:3000"
     expose:

@@ -19,7 +19,15 @@ from tensorflow.keras.models import load_model
 
 urls = ('/.*', 'hooks')
 app = web.application(urls, globals())
-loaded_model = load_model(os.path.dirname(__file__) + '/saved_model')
+
+# get the path to the model folder
+# special case if working dir is file directory
+model_path = os.path.dirname(__file__)
+if model_path:
+    model_path += '/'
+model_path += 'saved_model'
+
+loaded_model = load_model(model_path)
 
 class hooks:
     def POST(self):
@@ -34,5 +42,5 @@ class hooks:
         return predict_class
 
 if __name__ == '__main__':
-    os.environ['PORT'] = '8898'
+    os.environ['PORT'] = '8988'
     app.run()
