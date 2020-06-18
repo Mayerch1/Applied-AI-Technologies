@@ -9,9 +9,9 @@ const fs = tslib_1.__importStar(require("fs"));
 const _shared_1 = require("@shared");
 const _entities_1 = require("@entities");
 const Path_1 = require("../helper/Path");
-const child = tslib_1.__importStar(require("child_process"));
 const https_1 = require("https");
 const process_1 = require("process");
+const axios = require('axios');
 const upload = multer_1.default();
 const router = express_1.Router();
 const photoDao = new _daos_1.PhotoDao();
@@ -32,8 +32,11 @@ router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1
         for (key in files) {
             console.log(files[key][0]);
             var photo = new _entities_1.Photo(files[key][0].originalname, user);
+            if (!fs.existsSync("../picture")) {
+                fs.mkdirSync("../picture");
+            }
             fs.writeFileSync(Path_1.Path.getPath(photo.filename), files[key][0].buffer);
-            var result = child.execSync("python3 ../Detection/single_image_detection.py " + Path_1.Path.getPath(photo.filename));
+            var result = yield axios.post("http://" + process_1.env.PyDetect + "/hooks", Path_1.Path.getPath(photo.filename));
             hasMask = parseInt(result.toString()) == 0;
             console.log(result.toString());
             yield photoDao.add(photo);
