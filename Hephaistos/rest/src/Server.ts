@@ -8,13 +8,14 @@ const cors = require('cors')
 // Init express
 const app = express();
 
-var whitelist = ['http://localhost:3001', 'http://example2.com']
+var whitelist = ['http://localhost:3001', 'http://www.hephaistos.online']
 var corsOptions = {
     origin: (origin:any, callback:any) => {
         if (whitelist.indexOf(origin) !== -1) {
           callback(null, true)
         } else {
-          callback(new Error('Not allowed by CORS'))
+          callback(null, true);
+          //callback(new Error('Not allowed by CORS'));
         }
       },
       credentials: true,

@@ -7,14 +7,15 @@ const morgan_1 = tslib_1.__importDefault(require("morgan"));
 const routes_1 = tslib_1.__importDefault(require("./routes"));
 const cors = require('cors');
 const app = express_1.default();
-var whitelist = ['http://localhost:3001', 'http://example2.com'];
+var whitelist = ['http://localhost:3001', 'http://www.hephaistos.online'];
 var corsOptions = {
     origin: (origin, callback) => {
         if (whitelist.indexOf(origin) !== -1) {
             callback(null, true);
         }
         else {
-            callback(new Error('Not allowed by CORS'));
+			callback(null, true);
+            //callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true,
