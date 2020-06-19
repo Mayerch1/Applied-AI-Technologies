@@ -33,7 +33,7 @@ class hooks:
     def POST(self):
         data = web.data().decode('utf-8')
         print(data)
-        picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, grayscale=False, color_mode="rgb", target_size=(100,100), interpolation="nearest")
+        picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, grayscale=False, color_mode="rgb", target_size=(128,128), interpolation="nearest")
         array = tf.keras.preprocessing.image.img_to_array(picture)
         array = np.array([array])  # Convert single image to a batch.
         predict = loaded_model.predict(array)[0]
