@@ -39,7 +39,7 @@ class hooks:
         predict = loaded_model.predict(array)[0]
         predict_class = np.argmax(predict)
         predict_class = predict_class.tolist()
-	console.log(predict_class)
+	print(predict_class)
         return predict_class
 
 if __name__ == '__main__':
