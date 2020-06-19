@@ -27,4 +27,8 @@ yarn-debug.log*
 yarn-error.log*
 *.map
 
+#MaskDetectionTests
 Hephaistos/Detection/__pycache__/
+Hephaistos/Detection/tmp/
+Hephaistos/Detection/Test.ipynb
+Hephaistos/Detection/saved_model_test/
