@@ -40,8 +40,7 @@ router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, ne
             fs.writeFileSync( Path.getPath(photo.filename), files[key][0].buffer)
             var result = await axios.post("http://"+ env.PyDetect + "/hooks", Path.getPath(photo.filename)  )
             //var result = child.execSync("python3 ../Detection/single_image_detection.py " + Path.getPath(photo.filename));
-            hasMask = parseInt(result.toString()) == 0;
-            console.log(result.toString())
+            hasMask = parseInt(result.data.toString()) == 0;
             await photoDao.add(photo)
         }
         if(!hasMask){

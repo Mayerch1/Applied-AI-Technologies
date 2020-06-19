@@ -1,6 +1,6 @@
 import knex from "knex";
 import { env } from 'process';
-console.log("test" + env.DBHost + env.DBUser + env.DBPassword + env.DBName)
+
 export let pool = knex({
   client: "mysql",
   connection: {
