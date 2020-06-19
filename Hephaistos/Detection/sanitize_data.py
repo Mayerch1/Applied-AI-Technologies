@@ -14,7 +14,9 @@ datasets = [('ahmetfurkandemr/mask-datasets-v1', 'Mask_Dataset_v1'),
             ('niharika41298/withwithout-mask', 'With_Without'),
             ('shreyashwaghe/face-mask-dataset','Face_Mask_Dataset'),
             ('omkar1008/covid19-mask-detection', 'covid19_mask_detection'),
-            ('kiranbeethoju/face-mask-and-kerchief','face_mask_kerchief')]
+            ('kiranbeethoju/face-mask-and-kerchief','face_mask_kerchief'),
+            ('ashishjangra27/face-mask-12k-images-dataset', 'face_mask_12k'),
+            ('andrewmvd/animal-faces', 'animal_faces')]
 
 
 
@@ -166,6 +168,38 @@ def cat_mask_kerchief(wr):
 
                 wr.writerow([dirpath + '/' + img, '-1', mask_cnt, '-1', '-1', artificial, '1'])
 
+def cat_face_mask_12k(wr):
+    path = data_dir + 'face_mask_12k'
+
+    for (dirpath, _, filenames) in os.walk(path):
+        if filenames:
+            if dirpath.endswith('WithMask'):
+                mask_cnt = 1
+                no_mask = 0
+            elif dirpath.endswith('WithoutMask'):
+                mask_cnt = 0
+                no_mask = 1
+
+
+            for img in filenames:
+                
+                if not os.path.splitext(img)[0].isnumeric():
+                    # augmentation is done by our notebook
+                    continue
+
+                # artificial state is unknown
+                wr.writerow([dirpath + '/' + img, '1', mask_cnt, no_mask, 0, -1, 0])
+
+
+def cat_animal_faces(wr):
+    path = data_dir + 'animal_faces'
+
+    for (dirpath, _, filenames) in os.walk(path):
+        if filenames:
+            for img in filenames:
+                wr.writerow([dirpath + '/' + img, '0', '0', '0', '0', '0', '0'])
+
+
 
 
 def cat_data():
@@ -178,6 +212,9 @@ def cat_data():
         cat_face_mask_dataset(wr)
         cat_covid19_mask_list(wr)
         cat_mask_kerchief(wr)
+        cat_face_mask_12k(wr)
+        cat_animal_faces(wr)
+        
 
 
 
