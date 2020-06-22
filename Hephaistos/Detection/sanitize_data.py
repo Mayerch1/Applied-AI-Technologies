@@ -36,10 +36,6 @@ def download_dataset():
             print(dset[0] + ' already on disk')
 
 
-
-
-
-
 #===========================
 # categorize data
 #==========================
@@ -193,11 +189,17 @@ def cat_face_mask_12k(wr):
 
 def cat_animal_faces(wr):
     path = data_dir + 'animal_faces'
-
+    count = 0
+    used = 0
     for (dirpath, _, filenames) in os.walk(path):
         if filenames:
             for img in filenames:
-                wr.writerow([dirpath + '/' + img, '0', '0', '0', '0', '0', '0'])
+                if (count % 60) == 0:
+                    wr.writerow([dirpath + '/' + img, '0', '0', '0', '0', '0', '0'])
+                    used += 1
+                count += 1
+
+    print('{:d}/{:d}'.format(used, count))
 
 
 
