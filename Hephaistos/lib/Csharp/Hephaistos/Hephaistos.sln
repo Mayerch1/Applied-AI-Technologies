@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hephaistos", "Hephaistos\Hephaistos.csproj", "{C7AA1897-354F-4B7B-83E0-95026D53ED0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hephaistos", "Hephaistos\Hephaistos.csproj", "{C7AA1897-354F-4B7B-83E0-95026D53ED0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hephaistos.Test", "Hephaistos.Test\Hephaistos.Test.csproj", "{886F2001-A7D9-4DAD-BB58-2B2BAABFC1B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HephaistosDemonstrator", "HephaistosDemonstrator\HephaistosDemonstrator.csproj", "{B6590D0D-F7F4-4B55-B89D-67EAACCAC82E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{C7AA1897-354F-4B7B-83E0-95026D53ED0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7AA1897-354F-4B7B-83E0-95026D53ED0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7AA1897-354F-4B7B-83E0-95026D53ED0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{886F2001-A7D9-4DAD-BB58-2B2BAABFC1B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{886F2001-A7D9-4DAD-BB58-2B2BAABFC1B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{886F2001-A7D9-4DAD-BB58-2B2BAABFC1B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{886F2001-A7D9-4DAD-BB58-2B2BAABFC1B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6590D0D-F7F4-4B55-B89D-67EAACCAC82E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6590D0D-F7F4-4B55-B89D-67EAACCAC82E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6590D0D-F7F4-4B55-B89D-67EAACCAC82E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6590D0D-F7F4-4B55-B89D-67EAACCAC82E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
