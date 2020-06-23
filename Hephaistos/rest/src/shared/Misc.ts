@@ -51,7 +51,7 @@ export const adminMW = async (req: Request, res: Response, next: NextFunction) =
         }
     } catch (err) {
         return res.status(UNAUTHORIZED).json({
-            error: err.message,
+            error: "Invalid Token",
         });
     }
 };
@@ -76,7 +76,7 @@ export const userMW = async (req: Request, res: Response, next: NextFunction) =>
         }
     } catch (err) {
         return res.status(UNAUTHORIZED).json({
-            error: err.message,
+            error: "Invalid Token",
         });
     }
 };
@@ -96,7 +96,9 @@ export const APIMW = async (req: Request, res: Response, next: NextFunction) => 
                 {
                     next();
                 }
-                return;
+                res.status(UNAUTHORIZED).json({
+                    error: "Invalid Token",
+                });
             }
         }
         // Make sure user role is an admin
@@ -108,7 +110,7 @@ export const APIMW = async (req: Request, res: Response, next: NextFunction) => 
         }
     } catch (err) {
         return res.status(UNAUTHORIZED).json({
-            error: err.message,
+            error: "Invalid Token",
         });
     }
 };

@@ -37,7 +37,7 @@ exports.adminMW = (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, 
     }
     catch (err) {
         return res.status(http_status_codes_1.UNAUTHORIZED).json({
-            error: err.message,
+            error: "Invalid Token",
         });
     }
 });
@@ -57,7 +57,7 @@ exports.userMW = (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, f
     }
     catch (err) {
         return res.status(http_status_codes_1.UNAUTHORIZED).json({
-            error: err.message,
+            error: "Invalid Token",
         });
     }
 });
@@ -72,7 +72,9 @@ exports.APIMW = (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, fu
                 if (api) {
                     next();
                 }
-                return;
+                res.status(http_status_codes_1.UNAUTHORIZED).json({
+                    error: "Invalid Token",
+                });
             }
         }
         const clientData = yield jwtService.decodeJwt(jwt);
@@ -85,7 +87,7 @@ exports.APIMW = (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, fu
     }
     catch (err) {
         return res.status(http_status_codes_1.UNAUTHORIZED).json({
-            error: err.message,
+            error: "Invalid Token",
         });
     }
 });
