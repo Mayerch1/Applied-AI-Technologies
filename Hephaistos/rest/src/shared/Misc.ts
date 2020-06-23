@@ -95,10 +95,8 @@ export const APIMW = async (req: Request, res: Response, next: NextFunction) => 
                 if (api)
                 {
                     next();
+                    return;
                 }
-                res.status(UNAUTHORIZED).json({
-                    error: "Invalid Token",
-                });
             }
         }
         // Make sure user role is an admin
@@ -114,6 +112,7 @@ export const APIMW = async (req: Request, res: Response, next: NextFunction) => 
         });
     }
 };
+
 
 
 

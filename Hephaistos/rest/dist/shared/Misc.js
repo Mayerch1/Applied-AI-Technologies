@@ -71,10 +71,8 @@ exports.APIMW = (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, fu
                 var api = !!(yield userDao.checkApiToken(apitoken));
                 if (api) {
                     next();
+                    return;
                 }
-                res.status(http_status_codes_1.UNAUTHORIZED).json({
-                    error: "Invalid Token",
-                });
             }
         }
         const clientData = yield jwtService.decodeJwt(jwt);
