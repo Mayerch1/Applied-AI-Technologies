@@ -88,9 +88,9 @@ export const APIMW = async (req: Request, res: Response, next: NextFunction) => 
         // Get json-web-token
         const jwt = req.signedCookies[jwtCookieProps.key];
         if (!jwt) {
-            if(req.headers.authorization?.includes('Token:'))
+            if(req.headers.authorization?.includes('Token '))
             {
-                var apitoken = req.headers.authorization.replace('Token:', '');
+                var apitoken = req.headers.authorization.replace('Token ', '');
                 var api = !!(await userDao.checkApiToken(apitoken));
                 if (api)
                 {
@@ -124,9 +124,9 @@ export const getEmail =  async (req: Request) => {
         const jwt = req.signedCookies[jwtCookieProps.key];
 
         if (!jwt) {
-            if(req.headers.authorization?.includes('Token:'))
+            if(req.headers.authorization?.includes('Token '))
             {
-                var apitoken = req.headers.authorization.replace('Token:', '');
+                var apitoken = req.headers.authorization.replace('Token ', '');
                 var user = await userDao.checkApiToken(apitoken);
                 if (user)
                 {

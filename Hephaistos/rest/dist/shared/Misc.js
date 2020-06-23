@@ -66,8 +66,8 @@ exports.APIMW = (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, fu
     try {
         const jwt = req.signedCookies[cookies_1.jwtCookieProps.key];
         if (!jwt) {
-            if ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.includes('Token:')) {
-                var apitoken = req.headers.authorization.replace('Token:', '');
+            if ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.includes('Token ')) {
+                var apitoken = req.headers.authorization.replace('Token ', '');
                 var api = !!(yield userDao.checkApiToken(apitoken));
                 if (api) {
                     next();
@@ -95,8 +95,8 @@ exports.getEmail = (req) => tslib_1.__awaiter(void 0, void 0, void 0, function* 
     var _b;
     const jwt = req.signedCookies[cookies_1.jwtCookieProps.key];
     if (!jwt) {
-        if ((_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.includes('Token:')) {
-            var apitoken = req.headers.authorization.replace('Token:', '');
+        if ((_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.includes('Token ')) {
+            var apitoken = req.headers.authorization.replace('Token ', '');
             var user = yield userDao.checkApiToken(apitoken);
             if (user) {
                 return user.email;
