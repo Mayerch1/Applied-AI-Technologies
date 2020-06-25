@@ -8,6 +8,7 @@ Hephaistos/rest/public/src/node_modules
 Hephaistos/rest/picture/*.jpg
 Hephaistos/picture/*.jpg
 node_modules
+package-lock.json
 /.pnp
 .pnp.js
 

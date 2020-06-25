@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormGroup from 'react-bootstrap/FormGroup';
-import QRCode from 'qrcode.react'
+import QRCode from 'qrcode.react';
 
 type FormControlElement =
   | HTMLInputElement
