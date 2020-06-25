@@ -1,4 +1,5 @@
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const express_1 = require("express");
@@ -9,8 +10,9 @@ const fs = tslib_1.__importStar(require("fs"));
 const _shared_1 = require("@shared");
 const _entities_1 = require("@entities");
 const Path_1 = require("../helper/Path");
-const https_1 = require("https");
 const process_1 = require("process");
+const node_telegram_bot_api_1 = tslib_1.__importDefault(require("node-telegram-bot-api"));
+const bot = new node_telegram_bot_api_1.default((_a = process_1.env.TelegramToken) !== null && _a !== void 0 ? _a : '');
 const axios = require('axios');
 const upload = multer_1.default();
 const router = express_1.Router();
@@ -18,6 +20,7 @@ const photoDao = new _daos_1.PhotoDao();
 const userDao = new _daos_1.UserDao();
 var cpUpload = upload.fields([{ name: 'file', maxCount: 8 }, { name: 'path', maxCount: 1 }]);
 router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     try {
         const files = req.files;
         if (!files) {
@@ -39,10 +42,9 @@ router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1
             var result = yield axios.post("http://" + process_1.env.PyDetect + "/hooks", Path_1.Path.getPath(photo.filename));
             hasMask = parseInt(result.data.toString()) == 0;
             yield photoDao.add(photo);
-        }
-        if (!hasMask) {
-            var url = 'https://api.telegram.org/bot' + process_1.env.TelegramToken + '/sendMessage?chat_id=' + (user === null || user === void 0 ? void 0 : user.chatID) + "&text=Achtung eine Person ohne Maske ist eingedrungen!!!";
-            https_1.get(url);
+            if (!hasMask) {
+                bot.sendPhoto((_b = user === null || user === void 0 ? void 0 : user.chatID) !== null && _b !== void 0 ? _b : 0, files[key][0].buffer, { caption: "Achtung eine Person ohne Maske ist eingedrungen!!!" });
+            }
         }
         return res.status(http_status_codes_1.OK).json({ mask: hasMask }).end();
     }

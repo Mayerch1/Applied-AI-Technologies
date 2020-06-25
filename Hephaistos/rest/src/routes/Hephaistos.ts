@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { BAD_REQUEST, OK, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from 'http-status-codes';
+import { BAD_REQUEST, OK, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { UserDao, PhotoDao } from '@daos';
 import multer from 'multer';
 import * as fs from 'fs'
@@ -7,9 +7,11 @@ import {logger, getEmail, APIMW } from '@shared';
 import { NextFunction } from 'express-serve-static-core';
 import { Photo, IPhoto } from '@entities';
 import { Path } from '../helper/Path';
-import { get as gets } from 'https';
 import { env } from 'process';
+import TelegramBot from 'node-telegram-bot-api'
 
+
+const bot = new TelegramBot(env.TelegramToken??'')
 const axios = require('axios')
 const upload = multer() // for parsing multipart/form-data
 const router = Router();
@@ -42,10 +44,10 @@ router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, ne
             //var result = child.execSync("python3 ../Detection/single_image_detection.py " + Path.getPath(photo.filename));
             hasMask = parseInt(result.data.toString()) == 0;
             await photoDao.add(photo)
-        }
-        if(!hasMask){
-            var url = 'https://api.telegram.org/bot'+ env.TelegramToken + '/sendMessage?chat_id=' + user?.chatID + "&text=Achtung eine Person ohne Maske ist eingedrungen!!!";
-            gets(url)
+            if(!hasMask)
+            {
+                bot.sendPhoto(user?.chatID?? 0, files[key][0].buffer, {caption: "Achtung eine Person ohne Maske ist eingedrungen!!!"})
+            }
         }
 
         

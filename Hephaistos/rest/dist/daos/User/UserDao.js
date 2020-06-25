@@ -3,22 +3,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserDao = void 0;
 const tslib_1 = require("tslib");
 const _dbConnection_1 = require("@dbConnection");
+const util_1 = require("util");
 class UserDao {
-    getOne(email) {
+    getOne(param) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const res = yield _dbConnection_1.pool('users')
-                .select()
-                .where({
-                email: email
-            })
-                .then(resp => {
-                let res = resp[0];
-                return res;
-            })
-                .catch(err => {
-                console.log(err);
-                return undefined;
-            });
+            var res;
+            if (util_1.isNumber(param)) {
+                res = yield _dbConnection_1.pool('users')
+                    .select()
+                    .where({
+                    id: param
+                })
+                    .then(resp => {
+                    let res = resp[0];
+                    return res;
+                })
+                    .catch(err => {
+                    console.log(err);
+                    return undefined;
+                });
+            }
+            else {
+                res = yield _dbConnection_1.pool('users')
+                    .select()
+                    .where({
+                    email: param
+                })
+                    .then(resp => {
+                    let res = resp[0];
+                    return res;
+                })
+                    .catch(err => {
+                    console.log(err);
+                    return undefined;
+                });
+            }
             return res;
         });
     }

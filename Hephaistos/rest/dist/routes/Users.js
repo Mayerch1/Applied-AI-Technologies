@@ -1,4 +1,5 @@
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const express_1 = require("express");
@@ -7,8 +8,12 @@ const _daos_1 = require("@daos");
 const _shared_1 = require("@shared");
 const _entities_1 = require("@entities");
 const uuid_1 = require("uuid");
+const process_1 = require("process");
+const node_telegram_bot_api_1 = tslib_1.__importDefault(require("node-telegram-bot-api"));
 const router = express_1.Router();
 const userDao = new _daos_1.UserDao();
+const bot = new node_telegram_bot_api_1.default((_a = process_1.env.TelegramToken) !== null && _a !== void 0 ? _a : '');
+var TelegramTokenDic = {};
 router.get('/all', _shared_1.adminMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield userDao.getAll();
@@ -25,11 +30,16 @@ router.get('/get', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, voi
     try {
         var email = yield _shared_1.getEmail(req);
         const users = yield userDao.getOne(email);
+        var telegramurl = "";
+        if (users === null || users === void 0 ? void 0 : users.id) {
+            TelegramTokenDic[users === null || users === void 0 ? void 0 : users.id] = Buffer.from(uuid_1.v4().toLowerCase().replace('-', ''), "ascii").toString("base64");
+            telegramurl = "https://t.me/" + process_1.env.TelegramBotId + "?start=" + TelegramTokenDic[users === null || users === void 0 ? void 0 : users.id];
+        }
         return res.status(http_status_codes_1.OK).json({ email: users === null || users === void 0 ? void 0 : users.email,
             name: users === null || users === void 0 ? void 0 : users.name,
             surname: users === null || users === void 0 ? void 0 : users.surname,
             chatID: users === null || users === void 0 ? void 0 : users.chatID,
-            apiToken: users === null || users === void 0 ? void 0 : users.apiToken });
+            apiToken: users === null || users === void 0 ? void 0 : users.apiToken, telegramUrl: telegramurl });
     }
     catch (err) {
         _shared_1.logger.error(err.message, err);
@@ -38,6 +48,60 @@ router.get('/get', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, voi
         });
     }
 }));
+if (process_1.env.TelegramWebHook) {
+    router.post('/' + process_1.env.TelegramWebHook, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+        var _b, _c, _d, _e, _f;
+        try {
+            var updates;
+            if (process_1.env.HOST == 'localhost' || process_1.env.HOST == '127.0.0.1') {
+                updates = yield bot.getUpdates();
+            }
+            else {
+                updates = req.body;
+            }
+            console.log(updates);
+            for (var updateobject of updates) {
+                var token = (_b = updateobject.message) === null || _b === void 0 ? void 0 : _b.text;
+                if ((_d = (_c = updateobject.message) === null || _c === void 0 ? void 0 : _c.text) === null || _d === void 0 ? void 0 : _d.includes('/start')) {
+                    token = token === null || token === void 0 ? void 0 : token.replace('/start ', '');
+                    for (var key in TelegramTokenDic) {
+                        if (token && TelegramTokenDic[key].includes(token)) {
+                            var user = yield userDao.getOne(parseInt(key));
+                            if (user) {
+                                user.chatID = ((_f = (_e = updateobject.message) === null || _e === void 0 ? void 0 : _e.chat.id) === null || _f === void 0 ? void 0 : _f.toString()) || '';
+                                userDao.update(user);
+                                return res.status(http_status_codes_1.OK).json({
+                                    info: "user verbunden",
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return res.status(http_status_codes_1.OK).json({
+                info: "passt nicht",
+            });
+        }
+        catch (err) {
+            _shared_1.logger.error(err.message, err);
+            return res.status(http_status_codes_1.BAD_REQUEST).json({
+                error: err.message,
+            });
+        }
+    }));
+    if (!(process_1.env.HOST === 'localhost' || process_1.env.HOST === '127.0.0.1')) {
+        if (bot.hasOpenWebHook()) {
+            bot.deleteWebHook();
+        }
+        bot.setWebHook("https://" + process_1.env.HOST + "/api/users/" + process_1.env.TelegramWebHook);
+        if (!bot.hasOpenWebHook()) {
+            throw new Error("Webhook not Working");
+        }
+    }
+}
+else {
+    throw new Error("TelegramWebhook Enviroment Parameter is missing");
+}
 router.get('/NewApiToken', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         var email = yield _shared_1.getEmail(req);

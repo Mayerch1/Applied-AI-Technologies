@@ -1,5 +1,6 @@
 import { IUser } from '@entities';
 import { pool } from '@dbConnection';
+import { isNumber } from 'util';
 
 export interface IUserDao {
   getOne: (email: string) => Promise<IUser | undefined>;
@@ -11,24 +12,46 @@ export interface IUserDao {
 
 export class UserDao implements IUserDao {
   /**
-   * @param email
+   * @param email:string
+   * @param id:number
    */
-  public async getOne(email: string): Promise<IUser | undefined> {
-    const res = await pool<IUser>('users')
-      .select()
-      .where({
-        email: email
-      })
-      .then(resp => {
-        let res = resp[0];
-        return res;
-      })
-      .catch(err => {
-        console.log(err);
-        return undefined;
-      });
-    return res;
-  }
+  public async getOne(param: string|number): Promise<IUser | undefined> {
+    var res;
+    if (isNumber(param))
+    {
+        res = await pool<IUser>('users')
+        .select()
+        .where({
+          id: param
+        })
+        .then(resp => {
+          let res = resp[0];
+          return res;
+        })
+        .catch(err => {
+          console.log(err);
+          return undefined;
+        });
+    }
+    else{
+          res = await pool<IUser>('users')
+          .select()
+          .where({
+            email: param
+          })
+          .then(resp => {
+            let res = resp[0];
+            return res;
+          })
+          .catch(err => {
+            console.log(err);
+            return undefined;
+          });
+      }
+      return res;
+
+    }
+
 
   /**
    * @param apiToken

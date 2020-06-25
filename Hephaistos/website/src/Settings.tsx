@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormGroup from 'react-bootstrap/FormGroup';
+import QRCode from 'qrcode.react'
 
 type FormControlElement =
   | HTMLInputElement
@@ -17,6 +18,7 @@ interface IUserState {
     surname: string,
     chatID: string,
     apiToken: string,
+    telegramUrl: string
 }
 
 class Settings extends React.Component<{},IUserState> {
@@ -32,7 +34,8 @@ class Settings extends React.Component<{},IUserState> {
       name: '',
       surname: '',
       chatID: '',
-      apiToken: ''
+      apiToken: '',
+      telegramUrl: ''
     };
 
     axios.get("/users/get", {withCredentials: true}).then((res:AxiosResponse) => {
@@ -86,12 +89,14 @@ class Settings extends React.Component<{},IUserState> {
                   <Form.Control type="email" id="email" placeholder="email" value={this.state.email}  disabled={true} />
               </FormGroup>
               <FormGroup>
+              <FormGroup>
                 <label htmlFor="password">New Password</label>
                 <Form.Control id="password" type="password" placeholder="Password" value={this.state.password} onChange={evt => this.setState({password: evt.currentTarget.value})} />
               </FormGroup>
               <FormGroup>
                 <label htmlFor="password">Password confirm</label>
                 <Form.Control id="password_confirm" type="password" placeholder="Password confirm" value={this.state.passwordConfirm} onChange={evt => this.setState({passwordConfirm: evt.currentTarget.value})} />
+                </FormGroup>
               </FormGroup>
               <FormGroup>
                   <label htmlFor="name">Name</label>
@@ -107,6 +112,13 @@ class Settings extends React.Component<{},IUserState> {
               </FormGroup>
               <FormGroup>
               <label htmlFor="token">Api-Token</label>
+
+              </FormGroup>
+              <FormGroup>
+                <Button type="submit">Submit</Button>
+              </FormGroup>
+              <FormGroup>
+                <label>API Token</label>
               <InputGroup>
                 <Form.Control id="token" type="text" placeholder="Api-Token" value={this.state.apiToken} disabled={true} />
                 <div className="input-group-append">
@@ -115,7 +127,11 @@ class Settings extends React.Component<{},IUserState> {
               </InputGroup>
               </FormGroup>
               <FormGroup>
-              <Button type="submit">Submit</Button>
+                <label>Telegram link</label>
+                <Form.Control id="token" type="text" placeholder="Api-Token" value={this.state.telegramUrl} disabled={true} />               
+                <FormGroup>
+                  <QRCode value={this.state.telegramUrl}  />
+                </FormGroup>
               </FormGroup>
           </Form>
       );
