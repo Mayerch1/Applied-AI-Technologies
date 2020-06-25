@@ -20,7 +20,6 @@ const photoDao = new _daos_1.PhotoDao();
 const userDao = new _daos_1.UserDao();
 var cpUpload = upload.fields([{ name: 'file', maxCount: 8 }, { name: 'path', maxCount: 1 }]);
 router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-    var _b;
     try {
         const files = req.files;
         if (!files) {
@@ -43,7 +42,9 @@ router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1
             hasMask = parseInt(result.data.toString()) == 0;
             yield photoDao.add(photo);
             if (!hasMask) {
-                bot.sendPhoto((_b = user === null || user === void 0 ? void 0 : user.chatID) !== null && _b !== void 0 ? _b : 0, files[key][0].buffer, { caption: "Achtung eine Person ohne Maske ist eingedrungen!!!" });
+                if (user && (user === null || user === void 0 ? void 0 : user.chatID) != "0") {
+                    bot.sendPhoto(user === null || user === void 0 ? void 0 : user.chatID, files[key][0].buffer, { caption: "Attention! A person without a mask has entered!!!" });
+                }
             }
         }
         return res.status(http_status_codes_1.OK).json({ mask: hasMask }).end();

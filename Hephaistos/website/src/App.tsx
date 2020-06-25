@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './res/logo.png';
 import logosmall from './res/logo_small.png';
 import './App.css';
 import Login from './login';
@@ -8,11 +7,9 @@ import Row from 'react-bootstrap/Row';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import './bootstrap.min.css';
-import Upload from './upload/Upload';
-import  Settings from './Settings';
-import axios from 'axios';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies, ReactCookieProps } from 'react-cookie';
+import Navigation from './Navigation';
 
 interface IAppState {
   LogInScreen: boolean,
@@ -20,36 +17,17 @@ interface IAppState {
 
 }
 
-interface Props extends ReactCookieProps {
-
-}
-class App extends React.Component<Props,IAppState> {
+class App extends React.Component<ReactCookieProps,IAppState> {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
   };
 
 
   /* binden um Zugriff zu bekommen*/
-  constructor(props:Readonly<Props>) {
+  constructor(props:Readonly<ReactCookieProps>) {
     super(props);
 
     window.addEventListener('popstate', () => this.forceUpdate());
-
-    // Add a response interceptor
-    axios.interceptors.response.use((response) => {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-      return response;
-    }, error => {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      if(error.toString().includes("401"))
-      {
-        this.setState({LogInScreen: true})
-      }
-      return Promise.reject(error);
-    });
-
 
     this.state = {
       LogInScreen: true,
@@ -75,13 +53,7 @@ class App extends React.Component<Props,IAppState> {
     });
   }
 
-  Navigation():JSX.Element{
-    if ( window.location.hash === "#settings") {
-      return <Settings />;
-      } else {
-       return <div><h1>Hier können Sie Bilder hochladen.</h1><Upload path='' /></div>;
-      }
-  }
+
 
 /* Eingegebene Informationen speichern, umwandeln, in console schreiben und einloggen */
 
@@ -105,11 +77,14 @@ class App extends React.Component<Props,IAppState> {
           crossOrigin="true"
         />
         <header className="App-header">
-          <Navbar bg="dark" variant="dark" expand="lg">
+          <Navbar bg="dark" variant="dark" expand="md">
             <Navbar.Brand href="#home"> <img src={logosmall} width="50px" height="50px" className="App-logo" alt="logo" /></Navbar.Brand>
             <Nav className="mr-auto">
               <Nav.Link href="#home" >Home</Nav.Link>
-              <Nav.Link href="#settings">Settings</Nav.Link>
+              {!this.state.LogInScreen   ?           <Nav.Link href="#settings">Settings</Nav.Link>:""}
+
+              <Nav.Link href="#AboutUs">AboutUs</Nav.Link>
+              <Nav.Link href="#privacy">Privacy</Nav.Link>
             </Nav>
             <Login />
           </Navbar>
@@ -118,16 +93,8 @@ class App extends React.Component<Props,IAppState> {
         <Row>
           <Col></Col>
           <Col xs={6}>
-            <main>
-            {this.state.LogInScreen ? 
-            <div>
-            <h1>Herzlich Willkommen bei HEPHAISTOS!</h1>
-            <h2>Ihr digitaler Helfer in der Corona-Zeit.</h2>
-            <img src={logo}  className="App-logo" alt="logo" />
-            </div>
-            :
-            <this.Navigation />
-            } 
+            <main>         
+            <Navigation />
             </main>
 
           </Col>

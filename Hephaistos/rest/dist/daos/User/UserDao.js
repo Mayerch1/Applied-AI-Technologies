@@ -80,7 +80,7 @@ class UserDao {
     add(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             try {
-                _dbConnection_1.pool('users')
+                return _dbConnection_1.pool('users')
                     .insert({
                     surname: user.surname,
                     name: user.name,
@@ -101,7 +101,7 @@ class UserDao {
     update(user) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             try {
-                _dbConnection_1.pool('users')
+                return _dbConnection_1.pool('users')
                     .where({
                     id: user.id
                 })
@@ -109,14 +109,9 @@ class UserDao {
                     surname: user.surname,
                     name: user.name,
                     email: user.email,
+                    pwdHash: user.pwdHash,
                     apiToken: user.apiToken,
                     chatID: user.chatID
-                })
-                    .then(response => {
-                    console.log(response);
-                })
-                    .catch(error => {
-                    console.log(error);
                 });
             }
             catch (error) {
@@ -127,7 +122,7 @@ class UserDao {
     delete(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             try {
-                _dbConnection_1.pool('users')
+                return _dbConnection_1.pool('users')
                     .where({
                     id: id
                 })

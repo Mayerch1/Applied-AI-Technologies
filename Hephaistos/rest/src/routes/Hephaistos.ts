@@ -46,7 +46,10 @@ router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, ne
             await photoDao.add(photo)
             if(!hasMask)
             {
-                bot.sendPhoto(user?.chatID?? 0, files[key][0].buffer, {caption: "Achtung eine Person ohne Maske ist eingedrungen!!!"})
+                if(user && user?.chatID != "0")
+                {
+                    bot.sendPhoto(user?.chatID, files[key][0].buffer, {caption: "Attention! A person without a mask has entered!!!"})
+                }
             }
         }
 

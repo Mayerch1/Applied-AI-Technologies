@@ -98,7 +98,7 @@ export class UserDao implements IUserDao {
    */
   public async add(user: IUser): Promise<void> {
     try {
-      pool<IUser>('users')
+     return pool<IUser>('users')
         .insert({
           surname: user.surname,
           name: user.name,
@@ -121,7 +121,7 @@ export class UserDao implements IUserDao {
    */
   public async update(user: IUser): Promise<void> {
     try {
-      pool<IUser>('users')
+      return pool<IUser>('users')
         .where({
           id: user.id
         })
@@ -129,14 +129,9 @@ export class UserDao implements IUserDao {
           surname: user.surname,
           name: user.name,
           email: user.email,
+          pwdHash: user.pwdHash,
           apiToken: user.apiToken,
           chatID: user.chatID
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
         });
     } catch (error) {
       throw error;
@@ -149,7 +144,7 @@ export class UserDao implements IUserDao {
    */
   public async delete(id: number): Promise<void> {
     try {
-      pool<IUser>('users')
+      return pool<IUser>('users')
         .where({
           id: id
         })

@@ -5,23 +5,24 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormGroup from 'react-bootstrap/FormGroup';
 import QRCode from 'qrcode.react';
+import Card from 'react-bootstrap/Card';
 
 type FormControlElement =
   | HTMLInputElement
   | HTMLSelectElement
   | HTMLTextAreaElement;
 interface IUserState {
-    email: string,
-    password: string,
-    passwordConfirm: string,
-    name: string,
-    surname: string,
-    chatID: string,
-    apiToken: string,
-    telegramUrl: string
+  email: string,
+  password: string,
+  passwordConfirm: string,
+  name: string,
+  surname: string,
+  chatID: string,
+  apiToken: string,
+  telegramUrl: string
 }
 
-class Settings extends React.Component<{},IUserState> {
+class Settings extends React.Component<{}, IUserState> {
   /* handle binds und Variablen für Settingsscreen */
   constructor(props: Readonly<IUserState>) {
     super(props);
@@ -38,14 +39,14 @@ class Settings extends React.Component<{},IUserState> {
       telegramUrl: ''
     };
 
-    axios.get("/users/get", {withCredentials: true}).then((res:AxiosResponse) => {
-      this.setState( res.data);
+    axios.get("/users/get", { withCredentials: true }).then((res: AxiosResponse) => {
+      this.setState(res.data);
     });
 
   }
 
   /* Xurl code generieren */
-  createXurlcodeFromObject(obj:any) {
+  createXurlcodeFromObject(obj: any) {
     var formBody = [];
     for (var property in obj) {
       var encodedKey = encodeURIComponent(property);
@@ -54,15 +55,15 @@ class Settings extends React.Component<{},IUserState> {
     }
     return formBody.join("&");
   }
-  
+
   /**
    * submit
    * @param {event} event 
    */
-  NewApiKey(event:any) {
+  NewApiKey(event: any) {
     event.preventDefault();
 
-    axios.get('/users/NewApiToken', {withCredentials: true}).then((res:AxiosResponse) => {
+    axios.get('/users/NewApiToken', { withCredentials: true }).then((res: AxiosResponse) => {
       this.setState(res.data)
     }).catch(res => console.log(res))
   }
@@ -71,72 +72,101 @@ class Settings extends React.Component<{},IUserState> {
    * submit
    * @param {event} event 
    */
-  handleSubmit(event:any) {
+  handleSubmit(event: any) {
     event.preventDefault();
 
     var formBody = this.createXurlcodeFromObject(this.state);
 
-    axios.put('/users/update', formBody, {withCredentials: true}).then((data) => {
+    axios.put('/users/update', formBody, { withCredentials: true }).then((data) => {
     }).catch(res => console.log(res))
   }
 
   /* SettingScreen */
   render() {
-      return (
-          <Form onSubmit={this.handleSubmit}>
-              <FormGroup>
-                  <label htmlFor="email">E-Mail-Adresse</label>
-                  <Form.Control type="email" id="email" placeholder="email" value={this.state.email}  disabled={true} />
-              </FormGroup>
-              <FormGroup>
-              <FormGroup>
-                <label htmlFor="password">New Password</label>
-                <Form.Control id="password" type="password" placeholder="Password" value={this.state.password} onChange={evt => this.setState({password: evt.currentTarget.value})} />
-              </FormGroup>
-              <FormGroup>
-                <label htmlFor="password">Password confirm</label>
-                <Form.Control id="password_confirm" type="password" placeholder="Password confirm" value={this.state.passwordConfirm} onChange={evt => this.setState({passwordConfirm: evt.currentTarget.value})} />
-                </FormGroup>
-              </FormGroup>
-              <FormGroup>
-                  <label htmlFor="name">Name</label>
-                  <Form.Control id="name" placeholder="Name" value={this.state.name} required onChange={evt => this.setState({name: evt.currentTarget.value})}/>
-              </FormGroup>
-              <FormGroup>
-                <label htmlFor="surname">Surname</label>
-                <Form.Control id="surname" placeholder="Surname" value={this.state.surname} required onChange={evt => this.setState({surname: evt.currentTarget.value})} />
-              </FormGroup>
-              <FormGroup>
-                <label htmlFor="chatId">Telegram Chat Id</label>
-                <Form.Control id="chatId" type="token" placeholder="Telegram Chat Id" value={this.state.chatID} onChange={evt => this.setState({chatID: evt.currentTarget.value})} />
-              </FormGroup>
-              <FormGroup>
-              <label htmlFor="token">Api-Token</label>
+    return (
+      <div>
+        <Card>
+          <Card.Header>
+            Settings
+          </Card.Header>
+          <Card.Body>
+        <Form onSubmit={this.handleSubmit}>
+          <FormGroup>
+            <label htmlFor="email">E-Mail-Adresse</label>
+            <Form.Control type="email" id="email" placeholder="email" value={this.state.email} disabled={true} />
+          </FormGroup>
+          <FormGroup>
+            <FormGroup>
+              <label htmlFor="password">New Password</label>
+              <Form.Control id="password" type="password" placeholder="Password" value={this.state.password} onChange={evt => this.setState({ password: evt.currentTarget.value })} />
+            </FormGroup>
+            <FormGroup>
+              <label htmlFor="password">Password confirm</label>
+              <Form.Control id="password_confirm" type="password" placeholder="Password confirm" value={this.state.passwordConfirm} onChange={evt => this.setState({ passwordConfirm: evt.currentTarget.value })} />
+            </FormGroup>
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="name">Name</label>
+            <Form.Control id="name" placeholder="Name" value={this.state.name} required onChange={evt => this.setState({ name: evt.currentTarget.value })} />
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="surname">Surname</label>
+            <Form.Control id="surname" placeholder="Surname" value={this.state.surname} required onChange={evt => this.setState({ surname: evt.currentTarget.value })} />
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="chatId">Telegram Chat Id</label>
+            <Form.Control id="chatId" type="password" placeholder="Telegram Chat Id" value={this.state.chatID} onChange={evt => this.setState({ chatID: evt.currentTarget.value })} />
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="token">Api-Token</label>
 
-              </FormGroup>
-              <FormGroup>
-                <Button type="submit">Submit</Button>
-              </FormGroup>
-              <FormGroup>
-                <label>API Token</label>
+          </FormGroup>
+          <FormGroup>
+            <Button type="submit">Submit</Button>
+          </FormGroup>
+        </Form>
+        </Card.Body>
+        </Card>
+        <Card>
+          <Card.Header>
+          API Token
+          </Card.Header>
+          <Card.Body>
+        <InputGroup>
+          <Form.Control id="token" type="text" placeholder="Api-Token" value={this.state.apiToken} disabled={true} />
+          <div className="input-group-append">
+            <Button onClick={this.NewApiKey}>New Api-Token</Button>
+          </div>
+        </InputGroup>
+        </Card.Body>
+        </Card>
+        <Card>
+          <Card.Header>
+            Telegram
+          </Card.Header>
+          <Card.Body>
+            <Form>
+            <FormGroup>
+            </FormGroup>
+            <FormGroup>
               <InputGroup>
-                <Form.Control id="token" type="text" placeholder="Api-Token" value={this.state.apiToken} disabled={true} />
+                <Form.Control id="token" type="text" placeholder="Api-Token" value={this.state.telegramUrl} disabled={true} />
                 <div className="input-group-append">
-                    <Button onClick={this.NewApiKey}>New Api-Token</Button>
-                </div>    
+                  <a href={this.state.telegramUrl} target="_blank"  rel="noopener noreferrer" className="btn btn-primary" >open link</a>
+                </div>
               </InputGroup>
+              <FormGroup className="home">
+                <QRCode value={this.state.telegramUrl} />
               </FormGroup>
-              <FormGroup>
-                <label>Telegram link</label>
-                <Form.Control id="token" type="text" placeholder="Api-Token" value={this.state.telegramUrl} disabled={true} />               
-                <FormGroup>
-                  <QRCode value={this.state.telegramUrl}  />
-                </FormGroup>
-              </FormGroup>
-          </Form>
-      );
-    }
-  
+            </FormGroup>
+                          
+            </Form>
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  }
+
 }
 
 export default Settings;

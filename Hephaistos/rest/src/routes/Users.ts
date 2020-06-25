@@ -2,10 +2,11 @@ import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, CREATED, OK } from 'http-status-codes';
 import { UserDao } from '@daos';
 import { paramMissingError, logger, adminMW, userMW, getEmail } from '@shared';
-import { UserRoles } from '@entities';
+import { UserRoles, IUser } from '@entities';
 import { v4 as uuid } from 'uuid';
 import { env } from 'process';
-import TelegramBot from 'node-telegram-bot-api'
+import bcrypt from 'bcrypt';
+import TelegramBot from 'node-telegram-bot-api';
 
 interface Dictionary<T> {
     [Key: string]: T;
@@ -62,49 +63,53 @@ router.get('/get', userMW, async (req: Request, res: Response) => {
     }
 });
 
+
+async function ConnectUser(obj:TelegramBot.Update,  res: Response) {
+    var token = obj.message?.text;
+    if(obj.message?.text?.includes('/start'))
+    {
+        token = token?.replace('/start ', '');
+        for (var key in TelegramTokenDic ){
+            if(token && TelegramTokenDic[key].includes(token)){
+                var user = await userDao.getOne(parseInt(key));
+                if (user){
+                    user.chatID = obj.message?.chat.id?.toString() || '';
+                    userDao.update(user);
+                    if(user?.chatID != "0")
+                    {
+                        bot.sendPhoto(user?.chatID, "../res/logo.png", {caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram."})
+                    }
+                    return;
+            
+                }
+            }
+        }
+    }
+
+    
+}
+
 if(env.TelegramWebHook)
  {
     //telegram Webhook
     router.post('/' + env.TelegramWebHook, async (req: Request, res: Response) => {
         try {
-            var updates:TelegramBot.Update[];
             //debug
             if (env.HOST == 'localhost' || env.HOST == '127.0.0.1')
             {
-               updates = await bot.getUpdates();
-
+               var updates = await bot.getUpdates();
+               for(var updateobject of updates)
+               {
+                  ConnectUser(updateobject, res);
+               }
             }
             else{
-                updates = req.body
-            }
-            // production
-            console.log(updates);
-            for(var updateobject of updates)
-            {
-                var token = updateobject.message?.text;
-                if(updateobject.message?.text?.includes('/start'))
-                {
-                    token = token?.replace('/start ', '');
-                    for (var key in TelegramTokenDic ){
-                        if(token && TelegramTokenDic[key].includes(token)){
-                            var user = await userDao.getOne(parseInt(key));
-                            if (user){
-                                user.chatID = updateobject.message?.chat.id?.toString() || '';
-                                userDao.update(user);
-                                return res.status(OK).json({
-                                    info: "user verbunden",
-                                });
-                        
-                            }
-                        }
-                    }
-                }
+                updateobject = req.body;
+                // production
+                ConnectUser(updateobject, res)
             }
 
-            return res.status(OK).json({
-                info: "passt nicht",
-            });
-
+            return res.status(OK).json({});
         } catch (err) {
             logger.error(err.message, err);
             return res.status(BAD_REQUEST).json({
@@ -117,7 +122,7 @@ if(env.TelegramWebHook)
     {
         if(bot.hasOpenWebHook() )
         {
-            bot.deleteWebHook();
+           bot.deleteWebHook();
         }
     
         bot.setWebHook("https://" + env.HOST + "/api/users/" + env.TelegramWebHook)
@@ -191,19 +196,25 @@ router.post('/add', adminMW, async (req: Request, res: Response) => {
 router.put('/update', adminMW, async (req: Request, res: Response) => {
     try {
         // Check Parameters
-        const user = req.body;
+        const user: IUser = req.body;
         var email:string = await getEmail(req);
         const userDatabase = await userDao.getOne(email);
         user.email = email;
         user.apiToken = userDatabase?.apiToken;
 
-        if (req.body.PasswordConfirm !== req.body.Password){
-            throw new Error("Password not invalid");
-        }
-        if (!user) {
+
+        if (!user || !userDatabase) {
             return res.status(BAD_REQUEST).json({
                 error: paramMissingError,
             });
+        }
+
+        if (req.body.password.length > 0 && req.body.passwordConfirm === req.body.password)
+        {
+            user.pwdHash = await bcrypt.hash(req.body.password, 12);
+        }
+        else {
+            user.pwdHash = userDatabase?.pwdHash;
         }
         // Update user
         user.id = Number(userDatabase?.id);

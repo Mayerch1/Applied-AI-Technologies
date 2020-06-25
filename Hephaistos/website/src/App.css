@@ -2,12 +2,21 @@ button{
   height: 100% !important;
 }
 
-.App {
+h1{
+  text-align: center;
+}
+h2{
   text-align: center;
 }
 
-img{
+.card{
+  margin-top: 20px;
+}
+
+.home{
   margin-bottom: 10px;
+
+  text-align: center;
 }
 
 .white{
@@ -32,10 +41,11 @@ h2{
    align-content: center
 }
 
-input {
-  text-align: center;
-}
 
+
+canvas {
+  margin-top: 10px;
+}
 
 .App-link {
   color:black;
@@ -54,13 +64,6 @@ input {
   text-align: left
 }
 
-input[type=text] {
-  color: red;
-}
-
-input[type=password] {
-  color: blue;
-}
 
 .popup {
   position: fixed;
