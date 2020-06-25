@@ -8,7 +8,7 @@ import { NextFunction } from 'express-serve-static-core';
 import { Photo, IPhoto } from '@entities';
 import { Path } from '../helper/Path';
 import { env } from 'process';
-import TelegramBot from 'node-telegram-bot-api'
+import TelegramBot from 'node-telegram-bot-api';
 
 
 const bot = new TelegramBot(env.TelegramToken??'')
