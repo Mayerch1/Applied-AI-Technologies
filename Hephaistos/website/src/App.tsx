@@ -81,7 +81,7 @@ class App extends React.Component<ReactCookieProps,IAppState> {
             <Navbar.Brand href="#home"> <img src={logosmall} width="50px" height="50px" className="App-logo" alt="logo" /></Navbar.Brand>
             <Nav className="mr-auto">
               <Nav.Link href="#home" >Home</Nav.Link>
-              {!this.state.LogInScreen   ?           <Nav.Link href="#settings">Settings</Nav.Link>:""}
+              {!this.state.LogInScreen ? <Nav.Link href="#settings">Settings</Nav.Link>:""}
 
               <Nav.Link href="#AboutUs">AboutUs</Nav.Link>
               <Nav.Link href="#privacy">Privacy</Nav.Link>

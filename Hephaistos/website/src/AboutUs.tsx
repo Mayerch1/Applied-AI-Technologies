@@ -9,7 +9,6 @@ class AboutUs extends React.Component {
           </div>
       );
     }
-  
 }
 
 export default AboutUs;

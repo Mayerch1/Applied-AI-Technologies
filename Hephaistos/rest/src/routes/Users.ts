@@ -5,7 +5,6 @@ import { paramMissingError, logger, adminMW, userMW, getEmail } from '@shared';
 import { UserRoles, IUser } from '@entities';
 import { v4 as uuid } from 'uuid';
 import { env } from 'process';
-import bcrypt from 'bcrypt';
 import TelegramBot from 'node-telegram-bot-api';
 
 interface Dictionary<T> {
@@ -63,21 +62,20 @@ router.get('/get', userMW, async (req: Request, res: Response) => {
     }
 });
 
-
 async function ConnectUser(obj:TelegramBot.Update,  res: Response) {
     var token = obj.message?.text;
     if(obj.message?.text?.includes('/start'))
     {
         token = token?.replace('/start ', '');
         for (var key in TelegramTokenDic ){
-            if(token && TelegramTokenDic[key].includes(token)){
-                var user = await userDao.getOne(parseInt(key));
-                if (user){
-                    user.chatID = obj.message?.chat.id?.toString() || '';
-                    userDao.update(user);
-                    if(user?.chatID != "0")
+            if (token && TelegramTokenDic[key].includes(token)){
+                var userId = parseInt(key);
+                if (userId){
+                    var chatID = obj.message?.chat.id?.toString() || '';
+                    userDao.updateChatId(userId, chatID);
+                    if(chatID != "0")
                     {
-                        bot.sendPhoto(user?.chatID, "../res/logo.png", {caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram."})
+                        bot.sendPhoto(chatID, "../res/logo.png", {caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram."})
                     }
                     return;
             
@@ -85,8 +83,6 @@ async function ConnectUser(obj:TelegramBot.Update,  res: Response) {
             }
         }
     }
-
-    
 }
 
 if(env.TelegramWebHook)
@@ -129,30 +125,24 @@ if(env.TelegramWebHook)
 
         if(!bot.hasOpenWebHook() )
         {
-            throw new Error("Webhook not Working")
+            //throw new Error("Webhook not Working")
         }
     }
- 
-
  }
  else{
      throw new Error("TelegramWebhook Enviroment Parameter is missing")
  }
 
 /******************************************************************************
- *                      Get All Users - "GET /api/users/NewApiToken"
+ *                      Create new ApiToken - "GET /api/users/NewApiToken"
  ******************************************************************************/
 
 router.get('/NewApiToken', userMW, async (req: Request, res: Response) => {
     try {
         var email:string = await getEmail(req);
-        const user = await userDao.getOne(email);
-        if(!user){
-            throw new Error("User Not LoggedIn");
-        }
-        user.apiToken =  Buffer.from(uuid().toLowerCase().replace('-', ''), "ascii").toString("base64");
-        await userDao.update(user);
-        return res.status(OK).json({apiToken: user.apiToken });
+        var apiToken =  Buffer.from(uuid().toLowerCase().replace('-', ''), "ascii").toString("base64");
+        await userDao.updateApiToken(email, apiToken);
+        return res.status(OK).json({apiToken: apiToken });
     } catch (err) {
         logger.error(err.message, err);
         return res.status(BAD_REQUEST).json({
@@ -161,6 +151,22 @@ router.get('/NewApiToken', userMW, async (req: Request, res: Response) => {
     }
 });
 
+/******************************************************************************
+ *                      Delete ChatID - "Delete /api/users/ChatId"
+ ******************************************************************************/
+
+router.delete('/ChatId', userMW, async (req: Request, res: Response) => {
+    try {
+        var email:string = await getEmail(req);
+        await userDao.updateChatId(email, "");
+        return res.status(OK).json({});
+    } catch (err) {
+        logger.error(err.message, err);
+        return res.status(BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+});
 
 
 /******************************************************************************
@@ -198,27 +204,8 @@ router.put('/update', adminMW, async (req: Request, res: Response) => {
         // Check Parameters
         const user: IUser = req.body;
         var email:string = await getEmail(req);
-        const userDatabase = await userDao.getOne(email);
-        user.email = email;
-        user.apiToken = userDatabase?.apiToken;
 
-
-        if (!user || !userDatabase) {
-            return res.status(BAD_REQUEST).json({
-                error: paramMissingError,
-            });
-        }
-
-        if (req.body.password.length > 0 && req.body.passwordConfirm === req.body.password)
-        {
-            user.pwdHash = await bcrypt.hash(req.body.password, 12);
-        }
-        else {
-            user.pwdHash = userDatabase?.pwdHash;
-        }
-        // Update user
-        user.id = Number(userDatabase?.id);
-        await userDao.update(user);
+        await userDao.update(email, user.surname, user.name);
         return res.status(OK).end();
     } catch (err) {
         logger.error(err.message, err);
@@ -228,6 +215,34 @@ router.put('/update', adminMW, async (req: Request, res: Response) => {
     }
 });
 
+/******************************************************************************
+ *                       Update - "PUT /api/users/changePassword"
+ ******************************************************************************/
+
+router.put('/changePassword', adminMW, async (req: Request, res: Response) => {
+    try {
+        // Check Parameters
+        var email:string = await getEmail(req);
+        var password: string;
+
+        if (req.body.password.length > 0 && req.body.passwordConfirm === req.body.password)
+        {
+            password =  req.body.password;
+        }
+        else {
+            return res.status(BAD_REQUEST).json({
+                info: "Password not conform",
+            });
+        }
+        await userDao.changePassword(email, password);
+        return res.status(OK).end();
+    } catch (err) {
+        logger.error(err.message, err);
+        return res.status(BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+});
 
 /******************************************************************************
  *                    Delete - "DELETE /api/users/delete/:id"

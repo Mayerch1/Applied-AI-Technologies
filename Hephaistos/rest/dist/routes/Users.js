@@ -9,7 +9,6 @@ const _shared_1 = require("@shared");
 const _entities_1 = require("@entities");
 const uuid_1 = require("uuid");
 const process_1 = require("process");
-const bcrypt_1 = tslib_1.__importDefault(require("bcrypt"));
 const node_telegram_bot_api_1 = tslib_1.__importDefault(require("node-telegram-bot-api"));
 const router = express_1.Router();
 const userDao = new _daos_1.UserDao();
@@ -57,12 +56,12 @@ function ConnectUser(obj, res) {
             token = token === null || token === void 0 ? void 0 : token.replace('/start ', '');
             for (var key in TelegramTokenDic) {
                 if (token && TelegramTokenDic[key].includes(token)) {
-                    var user = yield userDao.getOne(parseInt(key));
-                    if (user) {
-                        user.chatID = ((_e = (_d = obj.message) === null || _d === void 0 ? void 0 : _d.chat.id) === null || _e === void 0 ? void 0 : _e.toString()) || '';
-                        userDao.update(user);
-                        if ((user === null || user === void 0 ? void 0 : user.chatID) != "0") {
-                            bot.sendPhoto(user === null || user === void 0 ? void 0 : user.chatID, "../res/logo.png", { caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram." });
+                    var userId = parseInt(key);
+                    if (userId) {
+                        var chatID = ((_e = (_d = obj.message) === null || _d === void 0 ? void 0 : _d.chat.id) === null || _e === void 0 ? void 0 : _e.toString()) || '';
+                        userDao.updateChatId(userId, chatID);
+                        if (chatID != "0") {
+                            bot.sendPhoto(chatID, "../res/logo.png", { caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram." });
                         }
                         return;
                     }
@@ -99,7 +98,6 @@ if (process_1.env.TelegramWebHook) {
         }
         bot.setWebHook("https://" + process_1.env.HOST + "/api/users/" + process_1.env.TelegramWebHook);
         if (!bot.hasOpenWebHook()) {
-            throw new Error("Webhook not Working");
         }
     }
 }
@@ -109,13 +107,22 @@ else {
 router.get('/NewApiToken', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         var email = yield _shared_1.getEmail(req);
-        const user = yield userDao.getOne(email);
-        if (!user) {
-            throw new Error("User Not LoggedIn");
-        }
-        user.apiToken = Buffer.from(uuid_1.v4().toLowerCase().replace('-', ''), "ascii").toString("base64");
-        yield userDao.update(user);
-        return res.status(http_status_codes_1.OK).json({ apiToken: user.apiToken });
+        var apiToken = Buffer.from(uuid_1.v4().toLowerCase().replace('-', ''), "ascii").toString("base64");
+        yield userDao.updateApiToken(email, apiToken);
+        return res.status(http_status_codes_1.OK).json({ apiToken: apiToken });
+    }
+    catch (err) {
+        _shared_1.logger.error(err.message, err);
+        return res.status(http_status_codes_1.BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+}));
+router.delete('/ChatId', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+    try {
+        var email = yield _shared_1.getEmail(req);
+        yield userDao.updateChatId(email, "");
+        return res.status(http_status_codes_1.OK).json({});
     }
     catch (err) {
         _shared_1.logger.error(err.message, err);
@@ -147,22 +154,29 @@ router.put('/update', _shared_1.adminMW, (req, res) => tslib_1.__awaiter(void 0,
     try {
         const user = req.body;
         var email = yield _shared_1.getEmail(req);
-        const userDatabase = yield userDao.getOne(email);
-        user.email = email;
-        user.apiToken = userDatabase === null || userDatabase === void 0 ? void 0 : userDatabase.apiToken;
-        if (!user || !userDatabase) {
-            return res.status(http_status_codes_1.BAD_REQUEST).json({
-                error: _shared_1.paramMissingError,
-            });
-        }
+        yield userDao.update(email, user.surname, user.name);
+        return res.status(http_status_codes_1.OK).end();
+    }
+    catch (err) {
+        _shared_1.logger.error(err.message, err);
+        return res.status(http_status_codes_1.BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+}));
+router.put('/changePassword', _shared_1.adminMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+    try {
+        var email = yield _shared_1.getEmail(req);
+        var password;
         if (req.body.password.length > 0 && req.body.passwordConfirm === req.body.password) {
-            user.pwdHash = yield bcrypt_1.default.hash(req.body.password, 12);
+            password = req.body.password;
         }
         else {
-            user.pwdHash = userDatabase === null || userDatabase === void 0 ? void 0 : userDatabase.pwdHash;
+            return res.status(http_status_codes_1.BAD_REQUEST).json({
+                info: "Password not conform",
+            });
         }
-        user.id = Number(userDatabase === null || userDatabase === void 0 ? void 0 : userDatabase.id);
-        yield userDao.update(user);
+        yield userDao.changePassword(email, password);
         return res.status(http_status_codes_1.OK).end();
     }
     catch (err) {

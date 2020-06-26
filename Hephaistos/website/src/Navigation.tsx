@@ -13,7 +13,6 @@ class Navigation extends React.Component<{},INavigationState> {
     /* handle binds und Variablen für Benutzername Passwort und Loginscreen */
     constructor(props: Readonly<{}>) {
       super(props);
-      console.log(props);
       this.state = {
         LogInScreen: true
       };
