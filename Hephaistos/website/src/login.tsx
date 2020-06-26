@@ -149,7 +149,7 @@ class Login extends React.Component<{},ILoginState> {
         <div className="Login">
           <span className="white">You are logged in.</span>
           <ButtonGroup>
-            <Button variant="outline-secondary" onClick={() => { alert("Please contact Github (https://github.com/Mayerch1/Applied-AI-Technologies) maintainer to recover your password."); }}>Have you trouble?</Button>
+            <Button variant="outline-secondary" onClick={() => { alert("Please contact Github (https://github.com/Mayerch1/Applied-AI-Technologies) maintainer to recover your password."); }}>Do you have trouble?</Button>
             <Button variant="outline-secondary" onClick={this.handleLogout} >Logout</Button>
           </ButtonGroup>
         </div>
