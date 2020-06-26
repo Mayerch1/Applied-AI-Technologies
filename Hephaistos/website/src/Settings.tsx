@@ -191,6 +191,19 @@ class Settings extends React.Component<{}, IUserState> {
           <Card.Body>
             <Form >
               <Form.Row>
+              <Col>
+                  <label htmlFor="chatId">Telegram Url</label>
+                  <InputGroup>
+                    <Form.Control id="token" type="text" placeholder="Telegram-Url" value={this.state.telegramUrl} disabled={true} />
+                    <div className="input-group-append">
+                      <a href={this.state.telegramUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">open link</a>
+                    </div>
+
+                  </InputGroup>
+                  <div className="home">
+                     <QRCode value={this.state.telegramUrl} />
+                  </div>
+                </Col>
                 <Col>
                   <label htmlFor="chatId">Telegram Chat Id</label>
                   <InputGroup>
@@ -200,19 +213,8 @@ class Settings extends React.Component<{}, IUserState> {
                     </div>
                   </InputGroup>
                 </Col>
-                <Col>
-                  <label htmlFor="chatId">Telegram Url</label>
-                  <InputGroup>
-                    <Form.Control id="token" type="text" placeholder="Telegram-Url" value={this.state.telegramUrl} disabled={true} />
-                    <div className="input-group-append">
-                      <a href={this.state.telegramUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">open link</a>
-                    </div>
-                  </InputGroup>
-                </Col>
+
               </Form.Row>
-              <FormGroup className="home">
-                <QRCode value={this.state.telegramUrl} />
-              </FormGroup>
             </Form>
           </Card.Body>
         </Card>

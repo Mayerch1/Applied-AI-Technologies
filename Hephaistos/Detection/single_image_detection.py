@@ -16,7 +16,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import load_model
-
+import cv2
 urls = ('/.*', 'hooks')
 app = web.application(urls, globals())
 
@@ -29,15 +29,13 @@ model_path += 'saved_model'
 
 loaded_model = load_model(model_path)
 
+face_cascade = cv2.CascadeClassifier('./openCV/haarcascade_frontalface_default.xml')
+eye_cascade = cv2.CascadeClassifier('./openCV/haarcascade_eye.xml')
+smile_cascade = cv2.CascadeClassifier('./openCV/haarcascade_smile.xml')
+    
 
 
 def FaceDetection(path):
-    import cv2
-
-    face_cascade = cv2.CascadeClassifier('./openCV/haarcascade_frontalface_default.xml')
-    eye_cascade = cv2.CascadeClassifier('./openCV/haarcascade_eye.xml')
-    smile_cascade = cv2.CascadeClassifier('./openCV/haarcascade_smile.xml')
-    
     img = cv2.imread(path)
     shape=img.shape[0]/img.shape[1]
     img = cv2.resize(img,(512,int(512*shape)))
@@ -106,8 +104,8 @@ class hooks:
         print(data)
         
         facedetect=FaceDetection(os.path.dirname(__file__) + "/" + data)
-        if facedetect=="ok": return 1
-        elif facedetect=="nomask": return 0
+        if facedetect=="ok": return 0
+        elif facedetect=="nomask": return 1
         
         picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, grayscale=False, color_mode="rgb", target_size=(128,128), interpolation="nearest")
         array = tf.keras.preprocessing.image.img_to_array(picture)
