@@ -8,7 +8,8 @@ RUN wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=down
 RUN pip3 install tensorflow-2.2.0-cp38-cp38-linux_x86_64.whl
 RUN rm tensorflow-2.2.0-cp38-cp38-linux_x86_64.whl
 
-RUN pip3 install web.py Pillow
+
+RUN pip3 install web.py Pillow opencv-python
 #RUN pip3 install pudb
 
 WORKDIR /usr/app
