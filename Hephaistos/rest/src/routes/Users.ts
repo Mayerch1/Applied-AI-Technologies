@@ -1,15 +1,21 @@
 import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, CREATED, OK } from 'http-status-codes';
-import { ParamsDictionary } from 'express-serve-static-core';
 import { UserDao } from '@daos';
 import { paramMissingError, logger, adminMW, userMW, getEmail } from '@shared';
-import { UserRoles } from '@entities';
+import { UserRoles, IUser } from '@entities';
 import { v4 as uuid } from 'uuid';
+import { env } from 'process';
+import TelegramBot from 'node-telegram-bot-api';
+
+interface Dictionary<T> {
+    [Key: string]: T;
+}
 
 // Init shared
 const router = Router();
 const userDao = new UserDao();
-
+const bot = new TelegramBot(env.TelegramToken??'')
+var TelegramTokenDic: Dictionary<string> = {}
 
 /******************************************************************************
  *                      Get All Users - "GET /api/users/all"
@@ -28,18 +34,115 @@ router.get('/all', adminMW, async (req: Request, res: Response) => {
 });
 
 /******************************************************************************
- *                      Get All Users - "GET /api/users/get"
+ *                      Get Current User - "GET /api/users/get"
  ******************************************************************************/
 
 router.get('/get', userMW, async (req: Request, res: Response) => {
     try {
         var email:string = await getEmail(req);
         const users = await userDao.getOne(email);
+        var telegramurl: string = "";
+        if (users?.id){
+            TelegramTokenDic[users?.id] = Buffer.from(uuid().toLowerCase().replace('-', ''), "ascii").toString("base64");
+            telegramurl = "https://t.me/" + env.TelegramBotId + "?start=" +  TelegramTokenDic[users?.id];
+        }
+
+
         return res.status(OK).json({email: users?.email,
                                     name: users?.name, 
                                     surname: users?.surname,
                                     chatID: users?.chatID,
-                                    apiToken: users?.apiToken });
+                                    apiToken: users?.apiToken, 
+                                    telegramUrl: telegramurl});
+    } catch (err) {
+        logger.error(err.message, err);
+        return res.status(BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+});
+
+async function ConnectUser(obj:TelegramBot.Update,  res: Response) {
+    var token = obj.message?.text;
+    if(obj.message?.text?.includes('/start'))
+    {
+        token = token?.replace('/start ', '');
+        for (var key in TelegramTokenDic ){
+            if (token && TelegramTokenDic[key].includes(token)){
+                var userId = parseInt(key);
+                if (userId){
+                    var chatID = obj.message?.chat.id?.toString() || '';
+                    userDao.updateChatId(userId, chatID);
+                    if(chatID != "0")
+                    {
+                        bot.sendPhoto(chatID, "../res/logo.png", {caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram."})
+                    }
+                    return;
+            
+                }
+            }
+        }
+    }
+}
+
+if(env.TelegramWebHook)
+ {
+    //telegram Webhook
+    router.post('/' + env.TelegramWebHook, async (req: Request, res: Response) => {
+        try {
+            //debug
+            if (env.HOST == 'localhost' || env.HOST == '127.0.0.1')
+            {
+               var updates = await bot.getUpdates();
+               for(var updateobject of updates)
+               {
+                  ConnectUser(updateobject, res);
+               }
+            }
+            else{
+                updateobject = req.body;
+                // production
+                ConnectUser(updateobject, res)
+            }
+
+            return res.status(OK).json({});
+        } catch (err) {
+            logger.error(err.message, err);
+            return res.status(BAD_REQUEST).json({
+                error: err.message,
+            });
+        }
+    });
+
+    if (!(env.HOST === 'localhost' || env.HOST === '127.0.0.1'))
+    {
+        if(bot.hasOpenWebHook() )
+        {
+           bot.deleteWebHook();
+        }
+    
+        bot.setWebHook("https://" + env.HOST + "/api/users/" + env.TelegramWebHook)
+
+        if(!bot.hasOpenWebHook() )
+        {
+            //throw new Error("Webhook not Working")
+        }
+    }
+ }
+ else{
+     throw new Error("TelegramWebhook Enviroment Parameter is missing")
+ }
+
+/******************************************************************************
+ *                      Create new ApiToken - "GET /api/users/NewApiToken"
+ ******************************************************************************/
+
+router.get('/NewApiToken', userMW, async (req: Request, res: Response) => {
+    try {
+        var email:string = await getEmail(req);
+        var apiToken =  Buffer.from(uuid().toLowerCase().replace('-', ''), "ascii").toString("base64");
+        await userDao.updateApiToken(email, apiToken);
+        return res.status(OK).json({apiToken: apiToken });
     } catch (err) {
         logger.error(err.message, err);
         return res.status(BAD_REQUEST).json({
@@ -49,19 +152,14 @@ router.get('/get', userMW, async (req: Request, res: Response) => {
 });
 
 /******************************************************************************
- *                      Get All Users - "GET /api/users/NewApiToken"
+ *                      Delete ChatID - "Delete /api/users/ChatId"
  ******************************************************************************/
 
-router.get('/NewApiToken', userMW, async (req: Request, res: Response) => {
+router.delete('/ChatId', userMW, async (req: Request, res: Response) => {
     try {
         var email:string = await getEmail(req);
-        const user = await userDao.getOne(email);
-        if(!user){
-            throw new Error("User Not LoggedIn");
-        }
-        user.apiToken =  Buffer.from(uuid().toLowerCase().replace('-', ''), "ascii").toString("base64");
-        await userDao.update(user);
-        return res.status(OK).json({apiToken: user.apiToken });
+        await userDao.updateChatId(email, "");
+        return res.status(OK).json({});
     } catch (err) {
         logger.error(err.message, err);
         return res.status(BAD_REQUEST).json({
@@ -69,7 +167,6 @@ router.get('/NewApiToken', userMW, async (req: Request, res: Response) => {
         });
     }
 });
-
 
 
 /******************************************************************************
@@ -105,23 +202,10 @@ router.post('/add', adminMW, async (req: Request, res: Response) => {
 router.put('/update', adminMW, async (req: Request, res: Response) => {
     try {
         // Check Parameters
-        const user = req.body;
+        const user: IUser = req.body;
         var email:string = await getEmail(req);
-        const userDatabase = await userDao.getOne(email);
-        user.email = email;
-        user.apiToken = userDatabase?.apiToken;
 
-        if (req.body.PasswordConfirm !== req.body.Password){
-            throw new Error("Password not invalid");
-        }
-        if (!user) {
-            return res.status(BAD_REQUEST).json({
-                error: paramMissingError,
-            });
-        }
-        // Update user
-        user.id = Number(userDatabase?.id);
-        await userDao.update(user);
+        await userDao.update(email, user.surname, user.name);
         return res.status(OK).end();
     } catch (err) {
         logger.error(err.message, err);
@@ -131,6 +215,34 @@ router.put('/update', adminMW, async (req: Request, res: Response) => {
     }
 });
 
+/******************************************************************************
+ *                       Update - "PUT /api/users/changePassword"
+ ******************************************************************************/
+
+router.put('/changePassword', adminMW, async (req: Request, res: Response) => {
+    try {
+        // Check Parameters
+        var email:string = await getEmail(req);
+        var password: string;
+
+        if (req.body.password.length > 0 && req.body.passwordConfirm === req.body.password)
+        {
+            password =  req.body.password;
+        }
+        else {
+            return res.status(BAD_REQUEST).json({
+                info: "Password not conform",
+            });
+        }
+        await userDao.changePassword(email, password);
+        return res.status(OK).end();
+    } catch (err) {
+        logger.error(err.message, err);
+        return res.status(BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+});
 
 /******************************************************************************
  *                    Delete - "DELETE /api/users/delete/:id"
@@ -138,7 +250,7 @@ router.put('/update', adminMW, async (req: Request, res: Response) => {
 
 router.delete('/delete/:id', adminMW, async (req: Request, res: Response) => {
     try {
-        const { id } = req.params as ParamsDictionary;
+        const { id } = req.params;
         await userDao.delete(Number(id));
         return res.status(OK).end();
     } catch (err) {

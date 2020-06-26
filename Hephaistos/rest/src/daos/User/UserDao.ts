@@ -1,34 +1,58 @@
 import { IUser } from '@entities';
 import { pool } from '@dbConnection';
+import { isNumber } from 'util';
+import bcrypt from 'bcrypt';
 
 export interface IUserDao {
   getOne: (email: string) => Promise<IUser | undefined>;
   getAll: () => Promise<IUser[] | void>;
   add: (user: IUser) => Promise<void>;
-  update: (user: IUser) => Promise<void>;
+  changePassword: (email: string, password: string) => Promise<void>;
+  updateApiToken: (email: string, apiToken: string) => Promise<void>;
+  updateChatId: (id: string|number, chatId: string) => Promise<void>;
+  update: (email: string, name: string, surname: string) => Promise<void>;
   delete: (id: number) => Promise<void>;
 }
 
 export class UserDao implements IUserDao {
   /**
-   * @param email
+   * @param email:string
+   * @param id:number
    */
-  public async getOne(email: string): Promise<IUser | undefined> {
-    const res = await pool<IUser>('users')
-      .select()
-      .where({
-        email: email
-      })
-      .then(resp => {
-        let res = resp[0];
-        return res;
-      })
-      .catch(err => {
-        console.log(err);
-        return undefined;
-      });
+  public async getOne(param: string | number): Promise<IUser | undefined> {
+    var res;
+    if (isNumber(param)) {
+      res = await pool<IUser>('users')
+        .select()
+        .where({
+          id: param
+        })
+        .then(resp => {
+          return resp[0];
+        })
+        .catch(err => {
+          console.log(err);
+          return undefined;
+        });
+    }
+    else {
+      res = await pool<IUser>('users')
+        .select()
+        .where({
+          email: param
+        })
+        .then(resp => {
+          return resp[0];
+        })
+        .catch(err => {
+          console.log(err);
+          return undefined;
+        });
+    }
     return res;
+
   }
+
 
   /**
    * @param apiToken
@@ -40,8 +64,7 @@ export class UserDao implements IUserDao {
         apiToken: apiToken
       })
       .then(resp => {
-        let res = resp[0];
-        return res;
+        return resp[0];
       })
       .catch(err => {
         console.log(err);
@@ -54,19 +77,17 @@ export class UserDao implements IUserDao {
    *
    */
   public async getAll(): Promise<IUser[] | void> {
-    try {
-      const res = await pool<IUser>('users')
-        .select()
-        .then(resp => {
-          return resp;
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      return res;
-    } catch (error) {
-      throw error;
-    }
+
+    const res = await pool<IUser>('users')
+      .select()
+      .then(resp => {
+        return resp;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    return res;
+
   }
 
   /**
@@ -74,50 +95,90 @@ export class UserDao implements IUserDao {
    * @param user
    */
   public async add(user: IUser): Promise<void> {
-    try {
-      pool<IUser>('users')
-        .insert({
-          surname: user.surname,
-          name: user.name,
-          email: user.email
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } catch (error) {
-      throw error;
-    }
+    return pool<IUser>('users')
+      .insert({
+        surname: user.surname,
+        name: user.name,
+        email: user.email
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
   }
 
   /**
    *
    * @param user
    */
-  public async update(user: IUser): Promise<void> {
-    try {
-      pool<IUser>('users')
-        .where({
-          id: user.id
-        })
-        .update({
-          surname: user.surname,
-          name: user.name,
-          email: user.email,
-          apiToken: user.apiToken,
-          chatID: user.chatID
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } catch (error) {
-      throw error;
+  public async update(email: string, surname: string, name: string): Promise<void> {
+    return pool<IUser>('users')
+      .where({
+        email: email
+      })
+      .update({
+        surname: surname,
+        name: name
+      });
+  }
+
+
+  /**
+   *
+   * @param email
+   * @param password
+   */
+  public async changePassword(email: string, password: string): Promise<void> {
+    return pool<IUser>('users')
+      .where({
+        email: email
+      })
+      .update({
+        pwdHash: await bcrypt.hash(password, 12)
+      });
+
+  }
+
+  /**
+ *
+ * @param user
+ */
+  public async updateApiToken(email: string, apiToken: string): Promise<void> {
+    return pool<IUser>('users')
+      .where({
+        email: email
+      })
+      .update({
+        apiToken: apiToken
+      });
+
+  }
+
+  /**
+*
+* @param user
+*/
+  public async updateChatId(id: string|number, chatId: string): Promise<void> {
+    if (isNumber(id)) {
+      return pool<IUser>('users')
+      .where({
+        id: id
+      })
+      .update({
+        chatID: chatId
+      });
     }
+
+    return pool<IUser>('users')
+      .where({
+        email: id
+      })
+      .update({
+        chatID: chatId
+      });
   }
 
   /**
@@ -125,20 +186,16 @@ export class UserDao implements IUserDao {
    * @param id
    */
   public async delete(id: number): Promise<void> {
-    try {
-      pool<IUser>('users')
-        .where({
-          id: id
-        })
-        .del()
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } catch (error) {
-      throw error;
-    }
+    return pool<IUser>('users')
+      .where({
+        id: id
+      })
+      .del()
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 }

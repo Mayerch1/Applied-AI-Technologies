@@ -10,7 +10,7 @@ export interface IUser {
   surname: string;
   name: string;
   chatID: string;
-  apiToken: string;
+  apiToken: string | undefined;
   role: TUserRoles;
   email: string;
   pwdHash: string;
@@ -20,7 +20,7 @@ export class User implements IUser {
   surname: string;
   name: string;
   chatID: string;
-  apiToken: string;
+  apiToken: string | undefined;
   role: TUserRoles;
   email: string;
   pwdHash: string;

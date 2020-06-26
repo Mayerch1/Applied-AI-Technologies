@@ -12,6 +12,9 @@ interface ILoginState {
     showPopup: boolean
 }
 
+
+
+
 class Login extends React.Component<{},ILoginState> {
   /* handle binds und Variablen für Benutzername Passwort und Loginscreen */
   constructor(props: Readonly<ILoginState>) {
@@ -24,6 +27,23 @@ class Login extends React.Component<{},ILoginState> {
       LogInScreen: true,
       showPopup: false
     };
+
+    // Add a response interceptor
+  axios.interceptors.response.use((response) => {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  }, error => {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    console.log(error)
+    if(error.toString().includes("401"))
+    {
+      this.handleLogout()
+    }
+    return Promise.reject(error);
+  });
+  
 
   }
 
@@ -99,7 +119,9 @@ class Login extends React.Component<{},ILoginState> {
         }
       );
       document.dispatchEvent(event);
-    }).catch(res => console.log(res))
+    }).catch(res => {
+      this.setState({passwort: "", benutzername: ""})
+    })
   }
 
   /* LoginScreen mit "Login" und "Passwort vergessen?" rendern, falls nicht eingeloggt, sonst Logout und Hilfe anzeigen */
@@ -114,7 +136,7 @@ class Login extends React.Component<{},ILoginState> {
               <InputGroup.Append>
                 <ButtonGroup>
                   <Button variant="outline-secondary" type="submit">Login</Button>
-                  <Button variant="outline-secondary" onClick={() => { alert("Bitte wenden Sie sich an Github Maintainer um Ihr Passwort wiederherzustellen "); }}> Passwort vergessen? </Button>
+                  <Button variant="outline-secondary" onClick={() => { alert("Please contact Github (https://github.com/Mayerch1/Applied-AI-Technologies) maintainer to recover your password."); }}>recover password</Button>
                 </ButtonGroup>
               </InputGroup.Append>
             </InputGroup>
@@ -125,9 +147,9 @@ class Login extends React.Component<{},ILoginState> {
     else {
       return (
         <div className="Login">
-          <span className="white">Sie sind eingeloggt</span>
+          <span className="white">You are logged in.</span>
           <ButtonGroup>
-            <Button variant="outline-secondary" onClick={() => { alert("Bitte wenden Sie sich an Github Maintainer um Ihr Passwort wiederherzustellen "); }}>Haben sie Probleme?</Button>
+            <Button variant="outline-secondary" onClick={() => { alert("Please contact Github (https://github.com/Mayerch1/Applied-AI-Technologies) maintainer to recover your password."); }}>Do you have trouble?</Button>
             <Button variant="outline-secondary" onClick={this.handleLogout} >Logout</Button>
           </ButtonGroup>
         </div>
