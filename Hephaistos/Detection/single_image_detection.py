@@ -5,18 +5,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
+import os
 import sys 
 import numpy as np
-import os, sys
-import os
-import web 
-import json
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.models import load_model
+import web
+
 import cv2
+import tensorflow as tf
+
+
+
 urls = ('/.*', 'hooks')
 app = web.application(urls, globals())
 
@@ -27,7 +25,7 @@ if model_path:
     model_path += '/'
 model_path += 'saved_model'
 
-loaded_model = load_model(model_path)
+loaded_model = tf.keras.models.load_model(model_path)
 
 face_cascade = cv2.CascadeClassifier('./openCV/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('./openCV/haarcascade_eye.xml')

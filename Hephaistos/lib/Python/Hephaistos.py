@@ -64,7 +64,7 @@ class HephaistosDetector:
         
 
         if response.status_code == 401:
-            raise HephaistosDetector.UnauthorizedException("Invalid Token. Check the token of your user at https://hephaistos.online")
+            raise HephaistosDetector.UnauthorizedException("Invalid Token. Check the token of your user at https://www.hephaistos.online")
 
 
         elif not response.status_code == 200:
@@ -79,9 +79,3 @@ class HephaistosDetector:
 
 
         return resp_dict['mask']
-
-
-
-if __name__ == '__main__':
-    h = HephaistosDetector("[token]") # invalidated
-    print(h.mask_detect_file('lib_demo_mask.jpg'))

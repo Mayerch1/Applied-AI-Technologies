@@ -14,10 +14,20 @@ namespace HephaistosDemonstrator
             
         }
 
+
         private static async Task MainAsync()
         {
-            var h = new Hephaistos.HephaistosDetector("[token]");
-            Console.WriteLine(await h.MaskDetectFile(@"../../../../../../lib_demo_mask.jpg"));
+            const string file = @"../../../../demo_mask.jpg";
+            byte[] fileStream = File.ReadAllBytes(file);
+
+
+            var h = new Hephaistos.HephaistosDetector("NWRiNzEyMmZiM2YwLTQ0YTUtOGIzYi0zNTY4MTZhZDI3ZDA=");
+
+            bool authorized = await h.MaskDetectFile(file);
+            bool authorizedStream = await h.MaskDetectStream(fileStream);
+
+            Console.WriteLine("Detection with file " + authorized);
+            Console.WriteLine("Detection with stream " + authorizedStream);
         }
 
     }
