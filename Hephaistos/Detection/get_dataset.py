@@ -98,7 +98,7 @@ def get_training_and_validation(validation_split: float = 0.15, test_split: floa
 
     # add column for class decision
     def class_from_data(row):
-        if row['no_mask']:
+        if row['Without_Masks']:
             return 'no_mask'
         else:
             return 'mask'
