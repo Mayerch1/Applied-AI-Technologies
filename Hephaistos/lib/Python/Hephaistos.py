@@ -14,13 +14,12 @@ class HephaistosDetector:
 
 
     def mask_detect_file(self, file_str: str):
-        """send the given file to the server for detection.
-        Returning result, if a human without mask was detected or not.
-        The server might send an telegram message (depending on user settings)
+        """Validate an image of the filesystem against the server-api.
+        Determins if the person(s) on the image wear a mask.
         
 
         Args:
-            file_str (str): path to the image
+            file_str (str): path to the image, can be absolute or relative
 
         Raises:
             FileNotFoundError: when the given file-string is not a file/not existing
@@ -28,7 +27,7 @@ class HephaistosDetector:
             ConnectionError: couldn't reach the server
 
         Returns:
-            [bool]: True, if human without mask was identified
+            [bool]: is_authorized, True when all persons wear a mask
         """
 
         if not os.path.exists(file_str) or not os.path.isfile(file_str):
@@ -42,9 +41,8 @@ class HephaistosDetector:
         
 
     def mask_detect_stream(self, data_stream):
-        """send the given bytestream to the server for detection.
-        Returning result, if a human without mask was detected or not.
-        The server might send an telegram message (depending on user settings)
+        """Validate a bytestream of an image against the server-api.
+        Determins if the person(s) on the image wear a mask.
         
 
         Args:
@@ -55,7 +53,7 @@ class HephaistosDetector:
             ConnectionError: couldn't reach the server
 
         Returns:
-            [bool]: True, if human without mask was identified
+            [bool]: is_authorized, True when all persons wear a mask
         """
 
         form_data = dict()

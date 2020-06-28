@@ -7,7 +7,7 @@ namespace HephaistosDemonstrator
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine(Directory.GetCurrentDirectory());
             MainAsync().GetAwaiter().GetResult();
@@ -21,10 +21,11 @@ namespace HephaistosDemonstrator
             byte[] fileStream = File.ReadAllBytes(file);
 
 
-            var h = new Hephaistos.HephaistosDetector("NWRiNzEyMmZiM2YwLTQ0YTUtOGIzYi0zNTY4MTZhZDI3ZDA=");
+            var h = new Hephaistos.HephaistosDetector("[token]");
 
             bool authorized = await h.MaskDetectFile(file);
             bool authorizedStream = await h.MaskDetectStream(fileStream);
+
 
             Console.WriteLine("Detection with file " + authorized);
             Console.WriteLine("Detection with stream " + authorizedStream);

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Hephaistos</name>
+    </assembly>
+    <members>
+        <member name="T:Hephaistos.HephaistosDetector">
+            <summary>
+            Detect people not wearing a mask on given images or byte-streams
+            </summary>
+        </member>
+        <member name="M:Hephaistos.HephaistosDetector.#ctor(System.String)">
+            <summary>
+            Object used for executing mask detection against the api
+            Holds the token in an object-specific HttpClient
+            Token is only checked for validity at each api call
+            </summary>
+            <param name="token">API-Token</param>
+        </member>
+        <member name="M:Hephaistos.HephaistosDetector.MaskDetectFile(System.String)">
+            <summary>
+            Validate an image of the filesystem against the server-api.
+            Determins if the person(s) on the image wear a mask.
+            </summary>
+            <param name="file">path to the image, can be absolute or relative</param>
+            <exception cref="T:System.UnauthorizedAccessException">used when the token is invalid</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">general connection issue</exception>
+            <exception cref="T:System.IO.FileNotFoundException">the given path does not direct to an existing image</exception>
+            <returns>isAuthorized, true when all persons wear a mask.</returns>
+        </member>
+        <member name="M:Hephaistos.HephaistosDetector.MaskDetectStream(System.Byte[],System.String)">
+            <summary>
+            Validate an image byteStream against the server-api.
+            Determins if the person(s) on the image wear a mask.
+            </summary>
+            <param name="stream">bytestream of the image</param>
+            <param name="fileName">file name, does not need to match the name of the used file</param>
+            <exception cref="T:System.UnauthorizedAccessException">used when the token is invalid</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">general connection issue</exception>
+            <returns>isAuthorized, true when all persons wear a mask.</returns>
+        </member>
+    </members>
+</doc>
