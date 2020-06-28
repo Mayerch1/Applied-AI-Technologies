@@ -80,6 +80,7 @@ def FaceDetection(path):
 
     if len(faces)>=1 and len(smile2)>=1:
         # NOT wearing a mask --> stop!
+        # NOTE: detection of face/smile alone is not a sufficent indicator for a no-mask
         return "nomask"
 
     elif len(faces)>=1 or len(eyes)+len(eyes2)>=2 or len(smile)+len(smile2)>=1:
@@ -103,7 +104,7 @@ class hooks:
         
         facedetect=FaceDetection(os.path.dirname(__file__) + "/" + data)
         if facedetect=="ok": return 0
-        elif facedetect=="nomask": return 1
+        # elif facedetect=="nomask": return 1
         
         picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, grayscale=False, color_mode="rgb", target_size=(256,256), interpolation="nearest")
         array = tf.keras.preprocessing.image.img_to_array(picture)

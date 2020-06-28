@@ -1,9 +1,21 @@
+"""This script helps in organising training data. It downloads all datasets specified in 'datasets' from kaggle (if not already done).
+Further, it indexes all images into a single index.csv, which can be used to filter and classify the training data into pandas.DataFrame structures.
+
+All data is downloaded into the 'data/' directory relative to the location of this file. The pwd is not relevant.
+
+The script should be executed directly from the python interpreter, but calling it from another program can be an option aswell.
+
+As indexing is a special case for each kaggle dataset, adding a new dataset into the 'datasets'-Array needs custom modification of the 'cat'-section of this script
+
+
+Your kaggle credential file should be downloaded and located in $HOME/.kaggle/kaggle.json, which can be retreived at https://www.kaggle.com/{username}/account.
+"""
+
+
 import os
 import csv
 
 import kaggle
-
-#TODO: check the https://www.kaggle.com/abuanas/masked-face-detection-wider-dataset
 
 
 data_dir = './data/'
@@ -15,8 +27,7 @@ datasets = [('ahmetfurkandemr/mask-datasets-v1', 'Mask_Dataset_v1'),
             ('shreyashwaghe/face-mask-dataset','Face_Mask_Dataset'),
             ('omkar1008/covid19-mask-detection', 'covid19_mask_detection'),
             ('kiranbeethoju/face-mask-and-kerchief','face_mask_kerchief'),
-            ('ashishjangra27/face-mask-12k-images-dataset', 'face_mask_12k'),
-            ('andrewmvd/animal-faces', 'animal_faces')]
+            ('ashishjangra27/face-mask-12k-images-dataset', 'face_mask_12k')
 
 
 
@@ -187,22 +198,6 @@ def cat_face_mask_12k(wr):
                 wr.writerow([dirpath + '/' + img, '1', mask_cnt, no_mask, 0, -1, 0])
 
 
-def cat_animal_faces(wr):
-    path = data_dir + 'animal_faces'
-    count = 0
-    used = 0
-    for (dirpath, _, filenames) in os.walk(path):
-        if filenames:
-            for img in filenames:
-                if (count % 60) == 0:
-                    wr.writerow([dirpath + '/' + img, '0', '0', '0', '0', '0', '0'])
-                    used += 1
-                count += 1
-
-    print('{:d}/{:d}'.format(used, count))
-
-
-
 
 def cat_data():
     with open('index.csv', 'w', newline='\n') as csv_file:
@@ -215,9 +210,7 @@ def cat_data():
         cat_covid19_mask_list(wr)
         cat_mask_kerchief(wr)
         cat_face_mask_12k(wr)
-        cat_animal_faces(wr)
         
-
 
 
 if __name__ == "__main__":

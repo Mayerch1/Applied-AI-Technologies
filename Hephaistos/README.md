@@ -28,6 +28,7 @@ Currently used datasets are
 * [Face mask dataset](https://www.kaggle.com/shreyashwaghe/face-mask-dataset)
 * [covid-19_mask_detection](https://www.kaggle.com/omkar1008/covid19-mask-detection)
 * [face_mask_and_kerchief](https://www.kaggle.com/kiranbeethoju/face-mask-and-kerchief)
+* [Face Mask ~12K Images Dataset](https://www.kaggle.com/ashishjangra27/face-mask-12k-images-dataset)
 
 
 ---
