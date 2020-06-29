@@ -4,8 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Client Library for using the Hephaistos Mask Detection API.</Description>
     <RepositoryUrl>https://github.com/Mayerch1/Applied-AI-Technologies</RepositoryUrl>
-    <Copyright>GNU General Public License v3.0</Copyright>
+    <Copyright>MIT</Copyright>
     <PackageProjectUrl>https://www.hephaistos.online</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>Hephaistos</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
