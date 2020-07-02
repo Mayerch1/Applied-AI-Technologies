@@ -7,8 +7,10 @@ var UserRoles;
     UserRoles[UserRoles["Admin"] = 1] = "Admin";
 })(UserRoles = exports.UserRoles || (exports.UserRoles = {}));
 class User {
-    constructor(nameOrUser, surname, email, role, pwdHash, chatID, apiToken) {
+    constructor(nameOrUser, surname, email, role, pwdHash, chatID, apiToken, date, packageId, leftPictures) {
         if (typeof nameOrUser === 'string' || typeof nameOrUser === 'undefined') {
+            var dt = new Date();
+            dt.setDate(dt.getDate() - 1);
             this.name = nameOrUser || '';
             this.surname = surname || '';
             this.email = email || '';
@@ -16,6 +18,9 @@ class User {
             this.pwdHash = pwdHash || '';
             this.chatID = chatID || '';
             this.apiToken = apiToken || '';
+            this.date = date || dt;
+            this.packageId = packageId || 0;
+            this.leftPictures = leftPictures || 0;
         }
         else {
             this.name = nameOrUser.name;
@@ -25,6 +30,9 @@ class User {
             this.pwdHash = nameOrUser.pwdHash;
             this.chatID = nameOrUser.chatID;
             this.apiToken = nameOrUser.apiToken;
+            this.date = nameOrUser.date;
+            this.packageId = nameOrUser.packageId;
+            this.leftPictures = nameOrUser.leftPictures;
         }
     }
 }

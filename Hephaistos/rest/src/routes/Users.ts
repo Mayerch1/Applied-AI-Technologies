@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, CREATED, OK } from 'http-status-codes';
-import { UserDao } from '@daos';
+import { UserDao, PhotoDao } from '@daos';
 import { paramMissingError, logger, adminMW, userMW, getEmail } from '@shared';
 import { UserRoles, IUser } from '@entities';
 import { v4 as uuid } from 'uuid';
@@ -14,6 +14,7 @@ interface Dictionary<T> {
 // Init shared
 const router = Router();
 const userDao = new UserDao();
+const photoDao = new PhotoDao();
 const bot = new TelegramBot(env.TelegramToken??'')
 var TelegramTokenDic: Dictionary<string> = {}
 
@@ -53,6 +54,7 @@ router.get('/get', userMW, async (req: Request, res: Response) => {
                                     surname: users?.surname,
                                     chatID: users?.chatID,
                                     apiToken: users?.apiToken, 
+                                    packageId: users?.packageId, 
                                     telegramUrl: telegramurl});
     } catch (err) {
         logger.error(err.message, err);
@@ -64,14 +66,20 @@ router.get('/get', userMW, async (req: Request, res: Response) => {
 
 async function ConnectUser(obj:TelegramBot.Update,  res: Response) {
     var token = obj.message?.text;
-    if(obj.message?.text?.includes('/start'))
+    var chatID;
+    if(obj.message?.text?.includes('/revoke'))
+    {
+        chatID = obj.message?.chat.id?.toString() || '';
+        photoDao.revokeLastByChatId(chatID);
+    }
+    else if(obj.message?.text?.includes('/start'))
     {
         token = token?.replace('/start ', '');
         for (var key in TelegramTokenDic ){
             if (token && TelegramTokenDic[key].includes(token)){
                 var userId = parseInt(key);
                 if (userId){
-                    var chatID = obj.message?.chat.id?.toString() || '';
+                    chatID = obj.message?.chat.id?.toString() || '';
                     userDao.updateChatId(userId, chatID);
                     if(chatID != "0")
                     {
@@ -199,7 +207,32 @@ router.post('/add', adminMW, async (req: Request, res: Response) => {
  *                       Update - "PUT /api/users/update"
  ******************************************************************************/
 
-router.put('/update', adminMW, async (req: Request, res: Response) => {
+router.put('/updatePackage', userMW, async (req: Request, res: Response) => {
+    try {
+        // Check Parameters
+        const pack: {packageId:number} = req.body;
+        if (!pack)
+        {
+            return res.status(BAD_REQUEST).json({});
+        }
+        var email:string = await getEmail(req);
+
+        await userDao.updatePackage(email, pack.packageId);
+        return res.status(OK).end();
+    } catch (err) {
+        logger.error(err.message, err);
+        return res.status(BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+});
+
+
+/******************************************************************************
+ *                       Update - "PUT /api/users/update"
+ ******************************************************************************/
+
+router.put('/update', userMW, async (req: Request, res: Response) => {
     try {
         // Check Parameters
         const user: IUser = req.body;
@@ -219,7 +252,7 @@ router.put('/update', adminMW, async (req: Request, res: Response) => {
  *                       Update - "PUT /api/users/changePassword"
  ******************************************************************************/
 
-router.put('/changePassword', adminMW, async (req: Request, res: Response) => {
+router.put('/changePassword', userMW, async (req: Request, res: Response) => {
     try {
         // Check Parameters
         var email:string = await getEmail(req);

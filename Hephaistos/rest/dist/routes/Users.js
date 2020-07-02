@@ -12,6 +12,7 @@ const process_1 = require("process");
 const node_telegram_bot_api_1 = tslib_1.__importDefault(require("node-telegram-bot-api"));
 const router = express_1.Router();
 const userDao = new _daos_1.UserDao();
+const photoDao = new _daos_1.PhotoDao();
 const bot = new node_telegram_bot_api_1.default((_a = process_1.env.TelegramToken) !== null && _a !== void 0 ? _a : '');
 var TelegramTokenDic = {};
 router.get('/all', _shared_1.adminMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
@@ -39,7 +40,8 @@ router.get('/get', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, voi
             name: users === null || users === void 0 ? void 0 : users.name,
             surname: users === null || users === void 0 ? void 0 : users.surname,
             chatID: users === null || users === void 0 ? void 0 : users.chatID,
-            apiToken: users === null || users === void 0 ? void 0 : users.apiToken, telegramUrl: telegramurl });
+            apiToken: users === null || users === void 0 ? void 0 : users.apiToken,
+            packageId: users === null || users === void 0 ? void 0 : users.packageId, telegramUrl: telegramurl });
     }
     catch (err) {
         _shared_1.logger.error(err.message, err);
@@ -49,16 +51,21 @@ router.get('/get', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, voi
     }
 }));
 function ConnectUser(obj, res) {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         var token = (_a = obj.message) === null || _a === void 0 ? void 0 : _a.text;
-        if ((_c = (_b = obj.message) === null || _b === void 0 ? void 0 : _b.text) === null || _c === void 0 ? void 0 : _c.includes('/start')) {
+        var chatID;
+        if ((_c = (_b = obj.message) === null || _b === void 0 ? void 0 : _b.text) === null || _c === void 0 ? void 0 : _c.includes('/revoke')) {
+            chatID = ((_e = (_d = obj.message) === null || _d === void 0 ? void 0 : _d.chat.id) === null || _e === void 0 ? void 0 : _e.toString()) || '';
+            photoDao.revokeLastByChatId(chatID);
+        }
+        else if ((_g = (_f = obj.message) === null || _f === void 0 ? void 0 : _f.text) === null || _g === void 0 ? void 0 : _g.includes('/start')) {
             token = token === null || token === void 0 ? void 0 : token.replace('/start ', '');
             for (var key in TelegramTokenDic) {
                 if (token && TelegramTokenDic[key].includes(token)) {
                     var userId = parseInt(key);
                     if (userId) {
-                        var chatID = ((_e = (_d = obj.message) === null || _d === void 0 ? void 0 : _d.chat.id) === null || _e === void 0 ? void 0 : _e.toString()) || '';
+                        chatID = ((_j = (_h = obj.message) === null || _h === void 0 ? void 0 : _h.chat.id) === null || _j === void 0 ? void 0 : _j.toString()) || '';
                         userDao.updateChatId(userId, chatID);
                         if (chatID != "0") {
                             bot.sendPhoto(chatID, "../res/logo.png", { caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram." });
@@ -150,7 +157,24 @@ router.post('/add', _shared_1.adminMW, (req, res) => tslib_1.__awaiter(void 0, v
         });
     }
 }));
-router.put('/update', _shared_1.adminMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+router.put('/updatePackage', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pack = req.body;
+        if (!pack) {
+            return res.status(http_status_codes_1.BAD_REQUEST).json({});
+        }
+        var email = yield _shared_1.getEmail(req);
+        yield userDao.updatePackage(email, pack.packageId);
+        return res.status(http_status_codes_1.OK).end();
+    }
+    catch (err) {
+        _shared_1.logger.error(err.message, err);
+        return res.status(http_status_codes_1.BAD_REQUEST).json({
+            error: err.message,
+        });
+    }
+}));
+router.put('/update', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.body;
         var email = yield _shared_1.getEmail(req);
@@ -164,7 +188,7 @@ router.put('/update', _shared_1.adminMW, (req, res) => tslib_1.__awaiter(void 0,
         });
     }
 }));
-router.put('/changePassword', _shared_1.adminMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+router.put('/changePassword', _shared_1.userMW, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         var email = yield _shared_1.getEmail(req);
         var password;

@@ -4,6 +4,7 @@ import AboutUs from './AboutUs';
 import Settings from './Settings';
 import Upload from './upload/Upload';
 import logo from './res/logo.png';
+import Pricing from './Pricing';
 
 interface INavigationState{
     LogInScreen: boolean;
@@ -39,6 +40,9 @@ class Navigation extends React.Component<{},INavigationState> {
       {
         if ( window.location.hash === "#settings") {
           return <Settings />;
+        }
+        else if (window.location.hash === "#packages"){
+          return <Pricing />;
         }
         else{
           return <div><h1>Test us! Upload a picture.</h1><Upload path='' /></div>;

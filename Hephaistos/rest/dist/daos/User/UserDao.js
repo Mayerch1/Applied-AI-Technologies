@@ -6,6 +6,32 @@ const _dbConnection_1 = require("@dbConnection");
 const util_1 = require("util");
 const bcrypt_1 = tslib_1.__importDefault(require("bcrypt"));
 class UserDao {
+    updatePackage(email, packageId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            var d = new Date();
+            d.setDate(d.getDate() - 1);
+            return _dbConnection_1.pool('users')
+                .where({
+                email: email
+            })
+                .update({
+                packageId: packageId,
+                date: d
+            });
+        });
+    }
+    updateLeftPictures(email, date, leftPictures) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return _dbConnection_1.pool('users')
+                .where({
+                email: email
+            })
+                .update({
+                leftPictures: leftPictures,
+                date: date
+            });
+        });
+    }
     getOne(param) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             var res;

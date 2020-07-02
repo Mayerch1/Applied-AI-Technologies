@@ -43,6 +43,8 @@ CREATE TABLE `photos` (
     `userID` int  NOT NULL ,
     `filename` varchar(255)   NOT NULL ,
     `orgfilename` varchar(255)   NOT NULL ,
+    `result` BIT NOT NULL ,
+    `userReject` BIT NOT NULL ,
     PRIMARY KEY (
         `id`
     )
@@ -59,6 +61,9 @@ CREATE TABLE `users` (
     `pwdHash` varchar(255)  NOT NULL ,
     `chatID` varchar(255)  NOT NULL ,
     `apiToken` varchar(255)  NOT NULL ,
+    `packageId` int  NOT NULL ,
+    `date` DATE  NOT NULL ,
+    `leftPictures` int  NOT NULL ,
     PRIMARY KEY (
         `id`
     )
@@ -74,8 +79,9 @@ ON `users` (`email`);
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (11,'Freeman','Gordan',1,'gordan.freeman@halflife.com','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy','',''),
-                           (12,'Smith','John',1,'jsmith@yahoo.com','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy','','');
+INSERT INTO `users` VALUES (11,'Demo','Hephaistos',1,'demo3@hephaistos.online','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy','','',0,'2008-11-11', 0),
+                           (12,'Demo','Hephaistos',1,'demo2@hephaistos.online','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy','','',0,'2008-11-11', 0),
+                           (13,'Demo','Hephaistos',1,'demo@hephaistos.online','$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy','','',0,'2008-11-11', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -1,5 +1,6 @@
 import { pool } from '@dbConnection';
 import { IPhoto } from '@entities';
+import { User } from 'node-telegram-bot-api';
 
 
 export interface IPhotoDao {
@@ -8,6 +9,16 @@ export interface IPhotoDao {
 }
 
 export class PhotoDao implements IPhotoDao {
+  public async revokeLastByChatId(id: string) {
+     return pool<IPhoto>('photos').join<User>('users', 'users.id', '=', 'photos.userID').where('users.chatID', '=',  id).orderBy('photos.id', 'DESC').limit(1).select('photos.id').then((value) =>{
+      return pool<IPhoto>('photos').where({
+        id: value[0].id
+      }).update({
+        userReject: true
+      });
+
+     });
+  }
   /**
    * @param id
    */
@@ -38,7 +49,9 @@ export class PhotoDao implements IPhotoDao {
         .insert({
           filename: photo.filename,
           orgfilename: photo.orgfilename,
-          userId: photo.userId
+          userId: photo.userId,
+          result: photo.result,
+          userReject: photo.userReject
         })
         .then(response => {
           console.log(response);

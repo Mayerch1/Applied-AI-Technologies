@@ -9,12 +9,38 @@ export interface IUserDao {
   add: (user: IUser) => Promise<void>;
   changePassword: (email: string, password: string) => Promise<void>;
   updateApiToken: (email: string, apiToken: string) => Promise<void>;
+  updatePackage: (email: string, packageId: number) => Promise<void>;
+  updateLeftPictures: (email: string, date:Date ,leftPictures: number) => Promise<void>;
   updateChatId: (id: string|number, chatId: string) => Promise<void>;
   update: (email: string, name: string, surname: string) => Promise<void>;
   delete: (id: number) => Promise<void>;
 }
 
 export class UserDao implements IUserDao {
+  public async updatePackage(email: string, packageId: number): Promise<void> {
+    var d = new Date();
+    d.setDate(d.getDate()-1);
+    return pool<IUser>('users')
+      .where({
+        email: email
+      })
+      .update({
+        packageId: packageId,
+        date: d
+      });
+  }
+
+  public async updateLeftPictures(email: string, date:Date ,leftPictures: number): Promise<void> {
+    return pool<IUser>('users')
+      .where({
+        email: email
+      })
+      .update({
+        leftPictures: leftPictures,
+        date: date
+      });
+
+  }
   /**
    * @param email:string
    * @param id:number

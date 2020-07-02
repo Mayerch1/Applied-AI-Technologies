@@ -82,8 +82,8 @@ class App extends React.Component<ReactCookieProps,IAppState> {
             <Nav className="mr-auto">
               <Nav.Link href="#home" >Home</Nav.Link>
               {!this.state.LogInScreen ? <Nav.Link href="#settings">Settings</Nav.Link>:""}
-
-              <Nav.Link href="#AboutUs">AboutUs</Nav.Link>
+              {!this.state.LogInScreen ? <Nav.Link href="#packages">Pricing</Nav.Link>:""}
+              <Nav.Link href="#AboutUs">About Us</Nav.Link>
               <Nav.Link href="#privacy">Privacy</Nav.Link>
             </Nav>
             <Login />

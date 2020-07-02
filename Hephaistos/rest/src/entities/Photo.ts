@@ -6,6 +6,8 @@ export interface IPhoto {
   orgfilename: string;
   userId: number;
   filename: string;
+  result: boolean;
+  userReject: boolean;
 }
 
 export class Photo implements IPhoto {
@@ -13,8 +15,10 @@ export class Photo implements IPhoto {
   orgfilename: string;
   filename: string;
   userId: number;
+  result: boolean;
+  userReject: boolean;
 
-  constructor(orgfilename?: string, user?: IUser, email?:string,filename?:string) {
+  constructor(orgfilename?: string, user?: IUser, email?:string,filename?:string, result?:boolean, userReject?: boolean) {
     if (!user)
     {
       throw "No User";
@@ -33,5 +37,7 @@ export class Photo implements IPhoto {
 
     this.userId = user.id || 0; // nicht korrekt implementiert falls userId == undefined dann erst user speichern und laden
     this.orgfilename = orgfilename || ' ';
+    this.result = result || false;
+    this.userReject = userReject || false;
   }
 }

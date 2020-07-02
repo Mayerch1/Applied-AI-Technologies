@@ -120,7 +120,7 @@ class Login extends React.Component<{},ILoginState> {
       );
       document.dispatchEvent(event);
     }).catch(res => {
-      this.setState({passwort: "", benutzername: ""})
+      this.setState({passwort: ""})
     })
   }
 

@@ -12,6 +12,7 @@ const _entities_1 = require("@entities");
 const Path_1 = require("../helper/Path");
 const process_1 = require("process");
 const node_telegram_bot_api_1 = tslib_1.__importDefault(require("node-telegram-bot-api"));
+const Package_1 = require("../helper/Package");
 const bot = new node_telegram_bot_api_1.default((_a = process_1.env.TelegramToken) !== null && _a !== void 0 ? _a : '');
 const axios = require('axios');
 const upload = multer_1.default();
@@ -32,17 +33,28 @@ router.post('/detection', _shared_1.APIMW, cpUpload, (req, res, next) => tslib_1
         var user = yield userDao.getOne(email);
         var hasMask = false;
         for (key in files) {
+            if (!user) {
+                return res.status(http_status_codes_1.BAD_REQUEST).json({
+                    error: "Invalid User",
+                });
+            }
+            user = Package_1.PackageHandler.checkAvaiblePictures(user);
+            if (user.leftPictures < 0) {
+                return res.status(http_status_codes_1.BAD_REQUEST).json({
+                    error: "Rate Limit",
+                });
+            }
             console.log(files[key][0]);
             var photo = new _entities_1.Photo(files[key][0].originalname, user);
             if (!fs.existsSync("../picture")) {
                 fs.mkdirSync("../picture");
             }
             fs.writeFileSync(Path_1.Path.getPath(photo.filename), files[key][0].buffer);
-            var result = yield axios.post("http://" + process_1.env.PyDetect + "/hooks", Path_1.Path.getPath(photo.filename));
-            hasMask = parseInt(result.data.toString()) == 0;
+            photo.result = false;
             yield photoDao.add(photo);
+            userDao.updateLeftPictures(email, user.date, user.leftPictures - 1);
             if (!hasMask) {
-                if (user && (user === null || user === void 0 ? void 0 : user.chatID) != "0") {
+                if (user && (user === null || user === void 0 ? void 0 : user.chatID) != "" && (user === null || user === void 0 ? void 0 : user.chatID) != "0") {
                     bot.sendPhoto(user === null || user === void 0 ? void 0 : user.chatID, files[key][0].buffer, { caption: "Attention! A person without a mask has entered!!!" });
                 }
             }

@@ -4,6 +4,17 @@ exports.PhotoDao = void 0;
 const tslib_1 = require("tslib");
 const _dbConnection_1 = require("@dbConnection");
 class PhotoDao {
+    revokeLastByChatId(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            return _dbConnection_1.pool('photos').join('users', 'users.id', '=', 'photos.userID').where('users.chatID', '=', id).orderBy('photos.id', 'DESC').limit(1).select('photos.id').then((value) => {
+                return _dbConnection_1.pool('photos').where({
+                    id: value[0].id
+                }).update({
+                    userReject: true
+                });
+            });
+        });
+    }
     getOne(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             console.log('getOne');
@@ -30,7 +41,9 @@ class PhotoDao {
                     .insert({
                     filename: photo.filename,
                     orgfilename: photo.orgfilename,
-                    userId: photo.userId
+                    userId: photo.userId,
+                    result: photo.result,
+                    userReject: photo.userReject
                 })
                     .then(response => {
                     console.log(response);
