@@ -10,7 +10,7 @@ export interface IPhotoDao {
 
 export class PhotoDao implements IPhotoDao {
   public async revokeLastByChatId(id: string) {
-     return pool<IPhoto>('photos').join<User>('users', 'users.id', '=', 'photos.userID').where('users.chatID', '=',  id).orderBy('photos.id', 'DESC').limit(1).select('photos.id').then((value) =>{
+     return pool<IPhoto>('photos').join<User>('users', 'users.id', '=', 'photos.userID').where('users.chatID', '=',  id).andWhere('photos.result' ,'=', '0').orderBy('photos.id', 'DESC').limit(1).select('photos.id').then((value) =>{
       return pool<IPhoto>('photos').where({
         id: value[0].id
       }).update({

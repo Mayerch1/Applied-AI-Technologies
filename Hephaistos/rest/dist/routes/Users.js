@@ -58,6 +58,7 @@ function ConnectUser(obj, res) {
         if ((_c = (_b = obj.message) === null || _b === void 0 ? void 0 : _b.text) === null || _c === void 0 ? void 0 : _c.includes('/revoke')) {
             chatID = ((_e = (_d = obj.message) === null || _d === void 0 ? void 0 : _d.chat.id) === null || _e === void 0 ? void 0 : _e.toString()) || '';
             photoDao.revokeLastByChatId(chatID);
+            bot.sendMessage(chatID, "The result of the last image was marked as incorrect. Thank You :)");
         }
         else if ((_g = (_f = obj.message) === null || _f === void 0 ? void 0 : _f.text) === null || _g === void 0 ? void 0 : _g.includes('/start')) {
             token = token === null || token === void 0 ? void 0 : token.replace('/start ', '');

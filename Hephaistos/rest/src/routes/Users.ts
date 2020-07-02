@@ -71,6 +71,7 @@ async function ConnectUser(obj:TelegramBot.Update,  res: Response) {
     {
         chatID = obj.message?.chat.id?.toString() || '';
         photoDao.revokeLastByChatId(chatID);
+        bot.sendMessage(chatID, "The result of the last image was marked as incorrect. Thank You :)")
     }
     else if(obj.message?.text?.includes('/start'))
     {
