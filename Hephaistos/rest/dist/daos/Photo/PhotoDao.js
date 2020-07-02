@@ -7,6 +7,9 @@ class PhotoDao {
     revokeLastByChatId(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return _dbConnection_1.pool('photos').join('users', 'users.id', '=', 'photos.userID').where('users.chatID', '=', id).andWhere('photos.result', '=', '0').orderBy('photos.id', 'DESC').limit(1).select('photos.id').then((value) => {
+                if (!value || value.length < 1) {
+                    throw new Error("No  Picture in Database");
+                }
                 return _dbConnection_1.pool('photos').where({
                     id: value[0].id
                 }).update({

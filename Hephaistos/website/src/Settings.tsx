@@ -8,10 +8,7 @@ import QRCode from 'qrcode.react';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 
-type FormControlElement =
-  | HTMLInputElement
-  | HTMLSelectElement
-  | HTMLTextAreaElement;
+
 interface IUserState {
   email: string,
   password: string,

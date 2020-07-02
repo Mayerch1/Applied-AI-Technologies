@@ -70,8 +70,13 @@ async function ConnectUser(obj:TelegramBot.Update,  res: Response) {
     if(obj.message?.text?.includes('/revoke'))
     {
         chatID = obj.message?.chat.id?.toString() || '';
-        photoDao.revokeLastByChatId(chatID);
+        try {
+        await photoDao.revokeLastByChatId(chatID);
         bot.sendMessage(chatID, "The result of the last image was marked as incorrect. Thank You :)")
+        } catch (error) {
+            bot.sendMessage(chatID, "No Picture found to revoke. :(" )
+            
+        }
     }
     else if(obj.message?.text?.includes('/start'))
     {
@@ -81,13 +86,12 @@ async function ConnectUser(obj:TelegramBot.Update,  res: Response) {
                 var userId = parseInt(key);
                 if (userId){
                     chatID = obj.message?.chat.id?.toString() || '';
-                    userDao.updateChatId(userId, chatID);
+                    await userDao.updateChatId(userId, chatID);
                     if(chatID != "0")
                     {
-                        bot.sendPhoto(chatID, "../res/logo.png", {caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram."})
+                       await bot.sendPhoto(chatID, "../res/logo.png", {caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram. If the result is wrong please type /revoke. We will learn from it."})
                     }
                     return;
-            
                 }
             }
         }

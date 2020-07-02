@@ -57,8 +57,13 @@ function ConnectUser(obj, res) {
         var chatID;
         if ((_c = (_b = obj.message) === null || _b === void 0 ? void 0 : _b.text) === null || _c === void 0 ? void 0 : _c.includes('/revoke')) {
             chatID = ((_e = (_d = obj.message) === null || _d === void 0 ? void 0 : _d.chat.id) === null || _e === void 0 ? void 0 : _e.toString()) || '';
-            photoDao.revokeLastByChatId(chatID);
-            bot.sendMessage(chatID, "The result of the last image was marked as incorrect. Thank You :)");
+            try {
+                yield photoDao.revokeLastByChatId(chatID);
+                bot.sendMessage(chatID, "The result of the last image was marked as incorrect. Thank You :)");
+            }
+            catch (error) {
+                bot.sendMessage(chatID, "No Picture found to revoke. :(");
+            }
         }
         else if ((_g = (_f = obj.message) === null || _f === void 0 ? void 0 : _f.text) === null || _g === void 0 ? void 0 : _g.includes('/start')) {
             token = token === null || token === void 0 ? void 0 : token.replace('/start ', '');
@@ -67,9 +72,9 @@ function ConnectUser(obj, res) {
                     var userId = parseInt(key);
                     if (userId) {
                         chatID = ((_j = (_h = obj.message) === null || _h === void 0 ? void 0 : _h.chat.id) === null || _j === void 0 ? void 0 : _j.toString()) || '';
-                        userDao.updateChatId(userId, chatID);
+                        yield userDao.updateChatId(userId, chatID);
                         if (chatID != "0") {
-                            bot.sendPhoto(chatID, "../res/logo.png", { caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram." });
+                            yield bot.sendPhoto(chatID, "../res/logo.png", { caption: "Welcome to Hephaistos! Your user account was successfully connected with Telegram. If the result is wrong please type /revoke. We will learn from it." });
                         }
                         return;
                     }

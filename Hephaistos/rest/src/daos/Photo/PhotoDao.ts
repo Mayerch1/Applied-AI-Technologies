@@ -1,6 +1,7 @@
 import { pool } from '@dbConnection';
 import { IPhoto } from '@entities';
 import { User } from 'node-telegram-bot-api';
+import { resolve } from 'dns';
 
 
 export interface IPhotoDao {
@@ -11,6 +12,9 @@ export interface IPhotoDao {
 export class PhotoDao implements IPhotoDao {
   public async revokeLastByChatId(id: string) {
      return pool<IPhoto>('photos').join<User>('users', 'users.id', '=', 'photos.userID').where('users.chatID', '=',  id).andWhere('photos.result' ,'=', '0').orderBy('photos.id', 'DESC').limit(1).select('photos.id').then((value) =>{
+       if (!value || value.length < 1){
+        throw new Error("No  Picture in Database");
+      }
       return pool<IPhoto>('photos').where({
         id: value[0].id
       }).update({
