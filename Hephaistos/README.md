@@ -1,4 +1,4 @@
-<img src="res/logo.png" alt="drawing" style="width:150px;"/>
+<img src="https://raw.githubusercontent.com/Mayerch1/Applied-AI-Technologies/master/Hephaistos/res/logo.png" alt="drawing" style="width:150px;"/>
 
 # HEPAHISTOS
 #### Heuristic epidermological pandemic hypercrisis Advanced Mask Detection internet supported tensorflow operational service
