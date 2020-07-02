@@ -46,6 +46,7 @@ services:
       - ./rest:/usr/app/
       - /usr/app/node_modules
       - ./picture:/usr/picture
+      - ./res:/usr/res
     ports:
       - "9091:3000"
     expose:
