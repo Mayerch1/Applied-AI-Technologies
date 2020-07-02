@@ -27,7 +27,7 @@ datasets = [('ahmetfurkandemr/mask-datasets-v1', 'Mask_Dataset_v1'),
             ('shreyashwaghe/face-mask-dataset','Face_Mask_Dataset'),
             ('omkar1008/covid19-mask-detection', 'covid19_mask_detection'),
             ('kiranbeethoju/face-mask-and-kerchief','face_mask_kerchief'),
-            ('ashishjangra27/face-mask-12k-images-dataset', 'face_mask_12k')
+            ('ashishjangra27/face-mask-12k-images-dataset', 'face_mask_12k')]
 
 
 
