@@ -22,7 +22,7 @@ data_dir = './data/'
 
 # each entry is tuple of download url and the root folder of the download
 # root directory is not dependend on kaggle dataset, might lead to singlular child elements
-datasets = [('ahmetfurkandemr/mask-datasets-v1', 'Mask_Dataset_v1'),
+datasets = [('dataset/725518287072a27bd50ff2f9280640002b5230a18d544541947304dc9b0148fa', 'Mask_Dataset_v1'),
             ('niharika41298/withwithout-mask', 'With_Without'),
             ('shreyashwaghe/face-mask-dataset','Face_Mask_Dataset'),
             ('omkar1008/covid19-mask-detection', 'covid19_mask_detection'),
