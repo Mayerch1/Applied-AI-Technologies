@@ -1,7 +1,9 @@
-![LOGO](https://raw.githubusercontent.com/Mayerch1/Applied-AI-Technologies/master/Hephaistos/res/logo.png)
-
 # HEPAHISTOS
 #### Heuristic epidermological pandemic hypercrisis Advanced Mask Detection internet supported tensorflow operational service
+
+
+![LOGO](https://raw.githubusercontent.com/Mayerch1/Applied-AI-Technologies/master/Hephaistos/res/logo.png)
+
 
 ---
 
@@ -23,14 +25,14 @@ All libraries can be downloaded at the [releases](https://github.com/mayerch1/Ap
 The libraries are published under the MIT license for easy integration. This is ONLY valid for code within the [Hephaistos/lib](lib) folder and does not affect the license of the rest of this repository
 
 
-### C\#
+### `C#`
 
 [![Nuget](https://img.shields.io/nuget/v/Hephaistos)](https://www.nuget.org/packages/Hephaistos/)
 
 Available at [Nuget](https://www.nuget.org/packages/Hephaistos/)
 
 ```c#
-    using using Hephaistos;
+    using Hephaistos;
 
     /*
     ...
