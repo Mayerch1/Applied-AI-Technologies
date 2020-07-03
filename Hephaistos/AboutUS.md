@@ -11,21 +11,23 @@
 
 This service offers an API for detecting people not wearing masks in public areas.
 
-This repo is divided into different parts, `Detection`, `rest`, `website` and ```lib```, responsible for the API/Website and detection part of this service.
+...
 
-The `lib` folder holds client libraries for directly accessing the API.
+...
 
----
+
 
 ## Client Libraries
 
 [![GitHub release](https://img.shields.io/github/release/mayerch1/Applied-AI-Technologies)](https://github.com/mayerch1/Applied-AI-Technologies/releases/latest)
 
-All libraries can be downloaded at the [releases](https://github.com/mayerch1/Applied-AI-Technologies/releases/latest) of this repository.
-The libraries are published under the MIT license for easy integration. This is ONLY valid for code within the [Hephaistos/lib](lib) folder and does not affect the license of the rest of this repository
+Before using the libraries, you need to create your personal API-Token. Simply login to your account, navigate into the `Settings` section and generate your Token.
+
+All libraries can be downloaded as [release](https://github.com/mayerch1/Applied-AI-Technologies/releases/latest) on the repository of this project.
+The libraries are published under the MIT license for easy integration. This is ONLY valid for the libraries and NOT for other parts of this website/project.
 
 
-### `C#`
+### C# / .NET Standard
 
 [![Nuget](https://img.shields.io/nuget/v/Hephaistos)](https://www.nuget.org/packages/Hephaistos/)
 
@@ -56,7 +58,7 @@ Available at [Nuget](https://www.nuget.org/packages/Hephaistos/)
 ### Python
 
 The python library is distributed as simple python file, which can be imported into any project.
-A more complex example, using a webcam feed can be found in the sources at [HephaistosDemonstrator.py](lib/Python/HephaistosDemonstrator.py)
+A more complex example, using a webcam feed can be found in the sources at [HephaistosDemonstrator.py](https://github.com/Mayerch1/Applied-AI-Technologies/blob/master/Hephaistos/lib/Python/HephaistosDemonstrator.py)
 
 ```python
 
@@ -71,9 +73,4 @@ print('Person is wearing a mask? ' + str(result))
 
 ### C/Assembly
 
-\[tbd\]
-
-
-
-
-
+Coming soon...
