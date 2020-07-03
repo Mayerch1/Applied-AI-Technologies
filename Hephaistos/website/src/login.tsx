@@ -15,9 +15,9 @@ interface ILoginState {
 
 
 
-class Login extends React.Component<{},ILoginState> {
+class Login extends React.Component<{},ILoginState, {}> {
   /* handle binds und Variablen für Benutzername Passwort und Loginscreen */
-  constructor(props: Readonly<ILoginState>) {
+  constructor(props: React.ElementType) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
@@ -128,7 +128,7 @@ class Login extends React.Component<{},ILoginState> {
   render() {
     if (this.state.LogInScreen === true) {
       return (
-        <div className="Login" >
+        <div className="Login justify-content-end" >
           <Form inline onSubmit={this.handleSubmit}>
             <InputGroup>
               <Form.Control type="text" placeholder="username" value={this.state.benutzername} onChange={evt => this.updateInputValue(evt)} />

@@ -43,16 +43,22 @@ class Navigation extends React.Component<{},INavigationState> {
         }
         else if (window.location.hash === "#packages"){
           return <Pricing />;
-        }
-        else{
-          return <div><h1>Test us! Upload a picture.</h1><Upload path='' /></div>;
-        }       
-  
       }
       else {
-        return   <div className="home"><h1>Welcome to HEPHAISTOS!</h1><h2>Your digital helper in the Corona era.</h2><img src={logo}  className="App-logo" alt="logo" /></div>
+        return <div><h1>Test us! Upload a picture.</h1><Upload path='' /></div>;
       }
+
     }
+    else {
+      return <div className="home">
+        <h1>Welcome to HEPHAISTOS!</h1>
+        <h2>Your digital helper in the Corona era.</h2>
+        <div className="logo">
+          <img src={logo} className="App-logo col-5" alt="logo" />
+        </div>
+      </div>
+    }
+  }
   
 }
 

@@ -77,16 +77,27 @@ class App extends React.Component<ReactCookieProps,IAppState> {
           crossOrigin="true"
         />
         <header className="App-header">
-          <Navbar bg="dark" variant="dark" expand="md">
-            <Navbar.Brand href="#home"> <img src={logosmall} width="50px" height="50px" className="App-logo" alt="logo" /></Navbar.Brand>
-            <Nav className="mr-auto">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Navbar.Brand href="#home"> <img src={logosmall} width="50px" height="50px" className="App-logo" alt="logo" />          </Navbar.Brand>
+ 
+  
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+
+
               <Nav.Link href="#home" >Home</Nav.Link>
               {!this.state.LogInScreen ? <Nav.Link href="#settings">Settings</Nav.Link>:""}
               {!this.state.LogInScreen ? <Nav.Link href="#packages">Pricing</Nav.Link>:""}
-              <Nav.Link href="#AboutUs">About Us</Nav.Link>
-              <Nav.Link href="#privacy">Privacy</Nav.Link>
-            </Nav>
-            <Login />
+              <Nav.Link  href="#AboutUs">About Us</Nav.Link>
+              <Nav.Link href="#privacy" >Privacy</Nav.Link>
+
+          </Nav>
+          <div >
+              <Login  />
+          </div>
+          </Navbar.Collapse>
+
           </Navbar>
 
         </header>
