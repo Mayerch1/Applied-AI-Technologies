@@ -26,6 +26,8 @@ Before using the libraries, you need to create your personal API-Token. Simply l
 All libraries can be downloaded as [release](https://github.com/mayerch1/Applied-AI-Technologies/releases/latest) on the repository of this project.
 The libraries are published under the MIT license for easy integration. This is ONLY valid for the libraries and NOT for other parts of this website/project.
 
+The Swagger/OpenAPI definition can be found [here](https://github.com/Mayerch1/Applied-AI-Technologies/tree/master/Hephaistos/lib/swagger.yaml)
+
 
 ### C# / .NET Standard
 
@@ -69,6 +71,16 @@ result = api.mask_detect_file("../my_file.jpg")
 print('Person is wearing a mask? ' + str(result))
 
 ```
+
+### Curl
+
+The curl request can be executed from within your shell or within any script you have written.
+In the following exapmle the token is `[insert_token]` while the word `Token` should not be replaced by yourself
+
+```bash
+curl -X POST "https://api.hephaistos.online/api/hephaistos/detection" -H  "accept: application/json" -H  "Authorization: Token [insert_token]" -H  "Content-Type: multipart/form-data" -F "file=@image.png;type=image/png"
+```
+
 
 
 ### C/Assembly

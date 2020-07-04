@@ -23,6 +23,8 @@ All libraries can be downloaded at the [releases](https://github.com/mayerch1/Ap
 The libraries are published under the MIT license for easy integration. This is ONLY valid for code within the [Hephaistos/lib](lib) folder and does not affect the license of the rest of this repository
 
 
+The Swagger/OpenAPI definition can be found [here](/lib/swagger.yaml)
+
 ### C#
 
 [![Nuget](https://img.shields.io/nuget/v/Hephaistos)](https://www.nuget.org/packages/Hephaistos/)
@@ -64,6 +66,16 @@ api = HephaistosDetector("token")
 result = api.mask_detect_file("../my_file.jpg")
 print('Person is wearing a mask? ' + str(result))
 
+```
+
+
+### Curl
+
+The curl request can be executed from within your shell or within any script you have written.
+In the following exapmle the token is `[insert_token]` while the word `Token` should not be replaced by yourself
+
+```bash
+curl -X POST "https://api.hephaistos.online/api/hephaistos/detection" -H  "accept: application/json" -H  "Authorization: Token [insert_token]" -H  "Content-Type: multipart/form-data" -F "file=@image.png;type=image/png"
 ```
 
 
