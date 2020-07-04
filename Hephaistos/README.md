@@ -7,7 +7,6 @@
 
 ![GitHub](https://img.shields.io/github/license/mayerch1/Applied-AI-Technologies)
 
-This service offers an API for detecting people not wearing masks in public areas.
 
 This repo is divided into different parts, `Detection`, `rest`, `website` and ```lib```, responsible for the API/Website and detection part of this service.
 
