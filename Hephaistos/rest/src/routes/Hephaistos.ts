@@ -59,7 +59,7 @@ router.post('/detection', APIMW,cpUpload, async (req: Request, res: Response, ne
             fs.writeFileSync( Path.getPath(photo.filename), files[key][0].buffer)
             var result = await axios.post("http://"+ env.PyDetect + "/hooks", Path.getPath(photo.filename)  )
             hasMask = parseInt(result.data.toString()) == 0;
-            //hasMask = false;
+            photo.result = hasMask;
             await photoDao.add(photo);
             userDao.updateLeftPictures(email, user.date, user.leftPictures - 1);
             if(!hasMask)
