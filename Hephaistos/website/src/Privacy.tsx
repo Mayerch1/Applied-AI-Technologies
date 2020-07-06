@@ -15,8 +15,13 @@ class Privacy extends React.Component {
 
         <h1>Privacy Policy for Hephaistos</h1>
         <p>At Hephaistos, accessible from www.hephaistos.online, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Hephaistos and how we use it.</p>
-        <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.</p>
-
+        <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us (info@hephaistos.online or https://github.com/Mayerch1/Applied-AI-Technologies). </p>
+        
+        <h2>Uploaded Images</h2>
+        <p>Hephaistos stores images uploaded by the user.
+           We store pictures to provide the service as it is and improve our service.
+           These pictures will never be shared with third parties.</p>
+  
         <h2>Log Files</h2>
         <p>Hephaistos follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information.</p>
         <h2>Cookies and Web Beacons</h2>
