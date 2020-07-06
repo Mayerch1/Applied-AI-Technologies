@@ -15,6 +15,8 @@ Your kaggle credential file should be downloaded and located in $HOME/.kaggle/ka
 import os
 import csv
 
+import tarfile
+import urllib.request
 import kaggle
 
 
@@ -22,12 +24,12 @@ data_dir = './data/'
 
 # each entry is tuple of download url and the root folder of the download
 # root directory is not dependend on kaggle dataset, might lead to singlular child elements
-datasets = [('dataset/725518287072a27bd50ff2f9280640002b5230a18d544541947304dc9b0148fa', 'Mask_Dataset_v1'),
-            ('niharika41298/withwithout-mask', 'With_Without'),
-            ('shreyashwaghe/face-mask-dataset','Face_Mask_Dataset'),
-            ('omkar1008/covid19-mask-detection', 'covid19_mask_detection'),
-            ('kiranbeethoju/face-mask-and-kerchief','face_mask_kerchief'),
-            ('ashishjangra27/face-mask-12k-images-dataset', 'face_mask_12k')]
+datasets = [('mask_dataset_v1/Mask_Datasets_v1.tar.gz', 'Mask_Dataset_v1', True),
+            ('niharika41298/withwithout-mask', 'With_Without', False),
+            ('shreyashwaghe/face-mask-dataset','Face_Mask_Dataset', False),
+            ('omkar1008/covid19-mask-detection', 'covid19_mask_detection', False),
+            ('kiranbeethoju/face-mask-and-kerchief','face_mask_kerchief', False),
+            ('ashishjangra27/face-mask-12k-images-dataset', 'face_mask_12k', False)]
 
 
 
@@ -38,6 +40,10 @@ def download_dataset():
     kaggle.api.authenticate()
 
     for dset in datasets:
+        if dset[2] == True:
+            # skip self-hosted
+            continue
+
         if not os.path.exists(data_dir + dset[1]):
             print('downloading ' + dset[0], '...')
 
@@ -45,6 +51,36 @@ def download_dataset():
             kaggle.api.dataset_download_files(dset[0], path=d_path, unzip=True)
         else:
             print(dset[0] + ' already on disk')
+
+def download_self_hosted():
+    for dset in datasets:
+        if dset[2] == False:
+            # skip kaggle hosted
+            continue
+        
+        if not os.path.exists(data_dir + dset[1]):
+            os.makedirs(data_dir + dset[1])
+
+            print('downloading ' + dset[0], '...')
+
+            d_path = data_dir + dset[1] + '/download.tar.gz'
+            url = 'https://update.cj-mayer.de/files/' + dset[0]
+
+            try:
+                urllib.request.urlretrieve(url, d_path)
+            except:
+                print('failed to download file ' + dset[1])
+                os.remove(data_dir + dset[1])
+
+            if os.path.exists(d_path):
+                tar = tarfile.open(d_path, "r:gz")
+                tar.extractall(data_dir + dset[1])
+                tar.close()
+                os.remove(d_path)
+            else:
+                # cleanup
+                print('failed to download file ' + dset[1])
+                os.rmdir(data_dir + dset[1])
 
 
 #===========================
@@ -217,4 +253,6 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
     download_dataset()
+    download_self_hosted()
+
     cat_data()

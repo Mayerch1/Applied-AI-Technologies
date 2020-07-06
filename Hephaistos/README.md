@@ -7,7 +7,6 @@
 
 ![GitHub](https://img.shields.io/github/license/mayerch1/Applied-AI-Technologies)
 
-This service offers an API for detecting people not wearing masks in public areas.
 
 This repo is divided into different parts, `Detection`, `rest`, `website` and ```lib```, responsible for the API/Website and detection part of this service.
 
@@ -22,6 +21,8 @@ The `lib` folder holds client libraries for directly accessing the API.
 All libraries can be downloaded at the [releases](https://github.com/mayerch1/Applied-AI-Technologies/releases/latest) of this repository.
 The libraries are published under the MIT license for easy integration. This is ONLY valid for code within the [Hephaistos/lib](lib) folder and does not affect the license of the rest of this repository
 
+
+The Swagger/OpenAPI definition can be found [here](/lib/swagger.yaml)
 
 ### C#
 
@@ -64,6 +65,16 @@ api = HephaistosDetector("token")
 result = api.mask_detect_file("../my_file.jpg")
 print('Person is wearing a mask? ' + str(result))
 
+```
+
+
+### Curl
+
+The curl request can be executed from within your shell or within any script you have written.
+In the following exapmle the token is `[insert_token]` while the word `Token` should not be replaced by yourself
+
+```bash
+curl -X POST "https://api.hephaistos.online/api/hephaistos/detection" -H  "accept: application/json" -H  "Authorization: Token [insert_token]" -H  "Content-Type: multipart/form-data" -F "file=@image.png;type=image/png"
 ```
 
 

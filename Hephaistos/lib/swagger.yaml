@@ -1,0 +1,61 @@
+swagger: "2.0"
+info:
+  description: "This public part of the API is used to detect people not wearing a ficial mask. It is acessing https://api.hephaistos.online/, but can be hosted as standalone service https://github.com/Mayerch1/Applied-AI-Technologies."
+  version: "1.0.0"
+  title: "HEPAHISTOS - API"
+  termsOfService: "https://www.hephaistos.online/#privacy"
+  contact:
+    email: "apiteam@hephaistos.online"
+  license:
+    name: "GNU General Public License v3.0"
+    url: "https://github.com/Mayerch1/Applied-AI-Technologies/blob/master/LICENSE"
+host: "api.hephaistos.online"
+basePath: "/api"
+tags:
+- name: "detection"
+  description: "Upload images for detection"
+  externalDocs:
+    description: "Find out more"
+    url: "https://www.hephaistos.online/#AboutUs"
+schemes:
+- "https"
+paths:
+  /hephaistos/detection:
+    post:
+      tags:
+      - "detection"
+      summary: "Upload an image"
+      description: ""
+      operationId: "uploadImage"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "file"
+        in: "formData"
+        description: "file to upload"
+        required: true
+        type: "file"
+      responses:
+        "401":
+          description: "Invalid or missing Token"
+        "400":
+          description: "Invalid input"
+      security:
+      - api_key: []
+  
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    
+    
+definitions:
+  ApiResponse:
+    type: "object"
+    properties:
+      mask:
+        type: "boolean"
+    
