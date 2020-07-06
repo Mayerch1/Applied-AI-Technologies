@@ -44,10 +44,18 @@ paths:
           description: "Invalid input"
       security:
       - api_key: []
-
   
 securityDefinitions:
   api_key:
     type: "apiKey"
     name: "Authorization"
     in: "header"
+    
+    
+definitions:
+  ApiResponse:
+    type: "object"
+    properties:
+      mask:
+        type: "boolean"
+    
