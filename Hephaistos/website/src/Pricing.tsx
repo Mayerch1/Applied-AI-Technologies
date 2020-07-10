@@ -74,7 +74,7 @@ class Pricing extends React.Component<{}, IPackageState> {
         </Card>
         <Card>
           <Card.Header>
-            39.99 &euro;/Month
+            Premium
           </Card.Header>
           <Card.Body>
             <Card.Text>
@@ -86,13 +86,13 @@ class Pricing extends React.Component<{}, IPackageState> {
           {this.state.packageId === 1 ? 
             <Button type="submit" variant="success">Deactivate</Button>
             :    
-          <Button type="submit" onClick={this.handleSubmit.bind(this, 1)}>Activate</Button>
+          <Button type="submit" onClick={this.handleSubmit.bind(this, 1)}>Subsrcibe for 39.99 &euro;/Month</Button>
   }
           </Card.Footer>
         </Card>
         <Card>
           <Card.Header>
-            59.99 &euro;/Month
+            Business
           </Card.Header>
           <Card.Body>
             50 000 Images per day.
@@ -101,8 +101,20 @@ class Pricing extends React.Component<{}, IPackageState> {
           {this.state.packageId === 2 ? 
             <Button type="submit" variant="success">Deactivate</Button>
             :    
-          <Button type="submit" onClick={this.handleSubmit.bind(this, 2)}>Activate</Button>
+          <Button type="submit" onClick={this.handleSubmit.bind(this, 2)}>Subsrcibe for 59.99 &euro;/Month</Button>
   }
+          </Card.Footer>
+        </Card>
+		<Card>
+          <Card.Header>
+           Security
+          </Card.Header>
+          <Card.Body>
+            Self-Hosted (Docker)
+			No Rate Limit
+          </Card.Body>
+          <Card.Footer>
+			<Link href="mailto:sales@hephaistos.online?subject=Licencing%20request%20for%20HEPAHISTOS"  classname="btn  btn-primary">Contact Us</Link>
           </Card.Footer>
         </Card>
         </CardGroup>
