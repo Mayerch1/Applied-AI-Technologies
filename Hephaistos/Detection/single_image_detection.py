@@ -30,7 +30,6 @@ if model_path:
 model = tf.keras.models.load_model(model_path+'saved_model')
 model_2= tf.keras.models.load_model(model_path+'saved_models/model_2')
 model_5= tf.keras.models.load_model(model_path+'saved_models/model_5')
-model_gray= tf.keras.models.load_model(model_path+'saved_models/model_gray')
 
 
 
@@ -122,13 +121,8 @@ class hooks:
         predict_2=model_2.predict(array)[0]
         predict_5=model_5.predict(array)[0]
                                    
-        picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, color_mode="grayscale", target_size=(256,256), interpolation="nearest")
-        array_gray = tf.keras.preprocessing.image.img_to_array(picture)
-        array_gray = np.array([array_gray])  # Convert single image to a batch.                           
-                                   
-        predict_gray=model_gray.predict(array_gray)[0]
-        
-        predict=np.round( predict + predict_2 + predict_5 + predict_gray,2)
+                
+        predict= predict + predict_2 + predict_5
         predict_class = np.argmax(predict)
         predict_class = predict_class.tolist()
         print(predict_class)
