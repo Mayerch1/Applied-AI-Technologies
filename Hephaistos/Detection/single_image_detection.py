@@ -123,8 +123,8 @@ class hooks:
         predict_5=model_5.predict(array)[0]
                                    
         picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, color_mode="grayscale", target_size=(256,256), interpolation="nearest")
-        array = tf.keras.preprocessing.image.img_to_array(picture)
-        array = np.array([array])  # Convert single image to a batch.                           
+        array_gray = tf.keras.preprocessing.image.img_to_array(picture)
+        array_gray = np.array([array_gray])  # Convert single image to a batch.                           
                                    
         predict_gray=model_gray.predict(array_gray)[0]
         
