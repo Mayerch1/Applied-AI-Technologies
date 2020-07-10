@@ -23,9 +23,16 @@ app = web.application(urls, globals())
 model_path = os.path.dirname(__file__)
 if model_path:
     model_path += '/'
-model_path += 'saved_model'
+#model_path += 'saved_model'
 
-loaded_model = tf.keras.models.load_model(model_path)
+#loaded_model = tf.keras.models.load_model(model_path+'saved_model)
+
+model = tf.keras.models.load_model(model_path+'saved_model)
+model_2= tf.keras.models.load_model(model_path+'saved_models/model_2')
+model_5= tf.keras.models.load_model(model_path+'saved_models/model_5')
+model_gray= tf.keras.models.load_model(model_path+'saved_models/model_gray')
+
+
 
 face_cascade = cv2.CascadeClassifier('./openCV/haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('./openCV/haarcascade_eye.xml')
@@ -106,10 +113,22 @@ class hooks:
         if facedetect=="ok": return 0
         # elif facedetect=="nomask": return 1
         
-        picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, grayscale=False, color_mode="rgb", target_size=(256,256), interpolation="nearest")
+        picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, color_mode="rgb", target_size=(256,256), interpolation="nearest")
         array = tf.keras.preprocessing.image.img_to_array(picture)
         array = np.array([array])  # Convert single image to a batch.
-        predict = loaded_model.predict(array)[0]
+        #predict = loaded_model.predict(array)[0]
+        
+        predict=model.predict(array)[0]
+        predict_2=model_2.predict(array)[0]
+        predict_5=model_5.predict(array)[0]
+                                   
+        picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, color_mode="grayscale", target_size=(256,256), interpolation="nearest")
+        array = tf.keras.preprocessing.image.img_to_array(picture)
+        array = np.array([array])  # Convert single image to a batch.                           
+                                   
+        predict_gray=model_gray.predict(array_gray)[0]
+        
+        predict=np.round( predict + predict_2 + predict_5 + np.flip(predict_gray) ,2)
         predict_class = np.argmax(predict)
         predict_class = predict_class.tolist()
         print(predict_class)
