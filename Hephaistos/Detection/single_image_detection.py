@@ -27,7 +27,7 @@ if model_path:
 
 #loaded_model = tf.keras.models.load_model(model_path+'saved_model)
 
-model = tf.keras.models.load_model(model_path+'saved_model)
+model = tf.keras.models.load_model(model_path+'saved_model')
 model_2= tf.keras.models.load_model(model_path+'saved_models/model_2')
 model_5= tf.keras.models.load_model(model_path+'saved_models/model_5')
 model_gray= tf.keras.models.load_model(model_path+'saved_models/model_gray')
@@ -128,7 +128,7 @@ class hooks:
                                    
         predict_gray=model_gray.predict(array_gray)[0]
         
-        predict=np.round( predict + predict_2 + predict_5 + np.flip(predict_gray) ,2)
+        predict=np.round( predict + predict_2 + predict_5 + predict_gray,2)
         predict_class = np.argmax(predict)
         predict_class = predict_class.tolist()
         print(predict_class)
