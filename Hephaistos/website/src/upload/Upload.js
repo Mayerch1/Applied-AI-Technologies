@@ -8,6 +8,7 @@ import './upload.css';
 class Upload extends Component {
   constructor(props) {
     super(props);
+    console.log(props)
     this.state = {
       files: [],
       uploading: false,
@@ -68,8 +69,7 @@ class Upload extends Component {
 
       const formData = new FormData();
       formData.append("file", file, file.name);
-      formData.append("path", this.props.path);
-      axios.post("/hephaistos/detection", formData, {withCredentials: true}).then((res) => {
+      axios.post(this.props.url, formData, {withCredentials: true}).then((res) => {
   
 
         const copy = { ...this.state.uploadProgress };
@@ -145,7 +145,7 @@ class Upload extends Component {
   render() {
     return (
       <div className="Upload">
-        <span className="Title">Upload Files</span>
+        <span className="Title">{this.props.title}</span>
         <div className="Content">
           <div>
             <Dropzone

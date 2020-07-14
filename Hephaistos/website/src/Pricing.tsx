@@ -110,11 +110,11 @@ class Pricing extends React.Component<{}, IPackageState> {
            Security
           </Card.Header>
           <Card.Body>
-            Self-Hosted (Docker)
-			No Rate Limit
+          No upload Limit <br />
+          Optional Self-Hosted (Docker)
           </Card.Body>
           <Card.Footer>
-			<Link href="mailto:sales@hephaistos.online?subject=Licencing%20request%20for%20HEPAHISTOS"  classname="btn  btn-primary">Contact Us</Link>
+			<Button href="mailto:sales@hephaistos.online?subject=Licencing%20request%20for%20HEPAHISTOS"  className="btn  btn-primary" >Contact Us</Button>
           </Card.Footer>
         </Card>
         </CardGroup>
