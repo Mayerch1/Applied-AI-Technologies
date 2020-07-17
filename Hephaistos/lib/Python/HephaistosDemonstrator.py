@@ -67,7 +67,7 @@ if __name__ == '__main__':
         print('Missing token as first argument')
         exit(-1)
     else:
-        token = sys.argv[2]
+        token = sys.argv[1]
 
 
     if len(sys.argv) < 3:

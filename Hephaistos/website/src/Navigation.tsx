@@ -48,7 +48,7 @@ class Navigation extends React.Component<{},INavigationState> {
           return <Pricing />;
         }
         else if (window.location.hash==="#provide_data"){
-          return <div><h1>Provide your data</h1><br /><p>Abuse can lead to suspension  of your account!</p><Row><Card className="col col-md-6 uploaddata"><div ><Upload  url="/hephaistos/provideDataMask" title="Mask images" /></div></Card><Card className="col col-md-6 uploaddata"><div ><Upload  url="/hephaistos/provideDataNoMask" title="No mask images" /></div></Card></Row></div>;
+          return <div><h1>Provide your data</h1><br /><p>Abuse can lead to suspension  of your account! By uploading your images you grant us all rights to use them internally for our service.</p><Row><Card className="col col-md-6 uploaddata"><div ><Upload  url="/hephaistos/provideDataMask" title="Mask images" /></div></Card><Card className="col col-md-6 uploaddata"><div ><Upload  url="/hephaistos/provideDataNoMask" title="No mask images" /></div></Card></Row></div>;
         }
 
       else {
