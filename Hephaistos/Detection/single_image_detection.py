@@ -12,6 +12,8 @@ import web
 
 import cv2
 import tensorflow as tf
+import tensorflow.keras
+from PIL import Image, ImageOps
 
 
 
@@ -30,6 +32,7 @@ if model_path:
 model = tf.keras.models.load_model(model_path+'saved_model')
 model_2= tf.keras.models.load_model(model_path+'saved_models/model_2')
 model_5= tf.keras.models.load_model(model_path+'saved_models/model_5')
+model_TM = tf.keras.models.load_model(model_path+'saved_models/teachableMachines/keras_model.h5')
 
 
 
@@ -107,22 +110,41 @@ class hooks:
     def POST(self):
         data = web.data().decode('utf-8')
         print(data)
+        path= os.path.dirname(__file__) + "/" + data
+        
+        #save original picture
+        np.set_printoptions(suppress=True)
+        data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+        image = Image.open(path)
         
         facedetect=FaceDetection(os.path.dirname(__file__) + "/" + data)
         if facedetect=="ok": return 0
         # elif facedetect=="nomask": return 1
         
-        picture=tf.keras.preprocessing.image.load_img(os.path.dirname(__file__) + "/" + data, color_mode="rgb", target_size=(256,256), interpolation="nearest")
+        picture=tf.keras.preprocessing.image.load_img(path , color_mode="rgb", target_size=(256,256), interpolation="nearest")
         array = tf.keras.preprocessing.image.img_to_array(picture)
         array = np.array([array])  # Convert single image to a batch.
         #predict = loaded_model.predict(array)[0]
         
+        np.set_printoptions(suppress=True)
+        data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+        image = Image.open(path)
+        #resize the image to a 224x224 with the same strategy as in TM2:
+        #resizing the image to be at least 224x224 and then cropping from the center
+        size = (224, 224)
+        image = ImageOps.fit(image, size, Image.ANTIALIAS)
+        image_array = np.asarray(image)
+        normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
+        # Load the image into the array
+        data[0] = normalized_image_array[:,:,0:3]
+ 
+        
         predict=model.predict(array)[0]
         predict_2=model_2.predict(array)[0]
         predict_5=model_5.predict(array)[0]
-                                   
+        predict_TM=np.flip(model_TM.predict(data))                         
                 
-        predict= predict + predict_2 + predict_5
+        predict= predict + predict_5 + 4*predict_TM
         predict_class = np.argmax(predict)
         predict_class = predict_class.tolist()
         print(predict_class)
