@@ -91,6 +91,7 @@ class App extends React.Component<ReactCookieProps,IAppState> {
               {!this.state.LogInScreen ? <Nav.Link href="#packages">Pricing</Nav.Link>:""}
               <Nav.Link  href="#AboutUs">About Us</Nav.Link>
               <Nav.Link href="#privacy" >Privacy</Nav.Link>
+              {!this.state.LogInScreen ?  <Nav.Link href="#provide_data" >Provide Dataset</Nav.Link>:""}
 
           </Nav>
           <div >
