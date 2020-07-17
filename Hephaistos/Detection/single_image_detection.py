@@ -114,7 +114,7 @@ class hooks:
         
         #save original picture
         np.set_printoptions(suppress=True)
-        data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+        _data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
         image = Image.open(path)
         
         facedetect=FaceDetection(os.path.dirname(__file__) + "/" + data)
@@ -126,9 +126,6 @@ class hooks:
         array = np.array([array])  # Convert single image to a batch.
         #predict = loaded_model.predict(array)[0]
         
-        np.set_printoptions(suppress=True)
-        data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-        image = Image.open(path)
         #resize the image to a 224x224 with the same strategy as in TM2:
         #resizing the image to be at least 224x224 and then cropping from the center
         size = (224, 224)
@@ -136,13 +133,13 @@ class hooks:
         image_array = np.asarray(image)
         normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
         # Load the image into the array
-        data[0] = normalized_image_array[:,:,0:3]
+        _data[0] = normalized_image_array[:,:,0:3]
  
         
         predict=model.predict(array)[0]
         predict_2=model_2.predict(array)[0]
         predict_5=model_5.predict(array)[0]
-        predict_TM=np.flip(model_TM.predict(data))                         
+        predict_TM=np.flip(model_TM.predict(_data))                         
                 
         predict= predict + predict_5 + 4*predict_TM
         predict_class = np.argmax(predict)
